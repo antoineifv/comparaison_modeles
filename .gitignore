@@ -6,4 +6,7 @@ dist/
 # fichiers verrouillés / données locale
 # verrous Excel temporaires
 ~$*.xlsx
+# pnpm (on utilise npm)
+pnpm-lock.yaml
+pnpm-workspace.yaml
 

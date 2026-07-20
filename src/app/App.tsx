@@ -67,13 +67,14 @@ const LOCATIONS = COMMUNES.map(name => {
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function RiskCell({ level, showLabel = false }: { level?: number; showLabel?: boolean }) {
+function RiskCell({ level, showLabel = false, isToday = false }: { level?: number; showLabel?: boolean; isToday?: boolean }) {
   if (level === undefined) return <td className="border border-border/30 p-2 text-center" />;
   const r = RISK[level];
+  const bg = isToday ? "#eff6ff" : r.bg;
   return (
     <td
       className="border border-border/30 p-1.5 text-center transition-colors"
-      style={{ backgroundColor: r.bg }}
+      style={{ backgroundColor: bg, boxShadow: isToday ? "inset 0 0 0 1px #3b82f6" : undefined }}
     >
       <div className="flex flex-col items-center gap-0.5">
         <span
@@ -294,8 +295,6 @@ export default function App() {
             <option value={7}>7 j</option>
             <option value={14}>14 j</option>
             <option value={21}>21 j</option>
-            <option value={30}>30 j</option>
-            <option value={60}>60 j</option>
             <option value={90}>90 j</option>
           </select>
           <span className="text-border">|</span>
@@ -411,7 +410,7 @@ export default function App() {
                       return (
                         <th
                           key={i}
-                          className={`py-2 px-1 text-center border-b border-border/40 ${isToday ? "border-b-2 border-b-primary" : ""}`}
+                          className={`py-2 px-1 text-center border-b border-border/40 ${isToday ? "border-b-2 border-b-primary bg-primary/10 rounded-t-md" : ""}`}
                           style={{ minWidth: "52px" }}
                         >
                           <div
@@ -444,7 +443,9 @@ export default function App() {
                           {m.name}
                         </div>
                       </td>
-                      {visibleSerials.map(serial => {
+                      {visibleSerials.map((serial, ci) => {
+                        const globalIdx = visibleRange.start + ci;
+                        const isTodayCell = globalIdx === TODAY_INDEX;
                         const day = communeData[serial];
                         const value = day?.[m.id as keyof CommuneDay]?.[hypothesis] as number | undefined;
                         return (
@@ -452,6 +453,7 @@ export default function App() {
                             key={serial}
                             level={value}
                             showLabel
+                            isToday={isTodayCell}
                           />
                         );
                       })}

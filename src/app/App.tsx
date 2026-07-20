@@ -307,8 +307,6 @@ export default function App() {
             <option value={0}>0 j</option>
             <option value={7}>7 j</option>
             <option value={14}>14 j</option>
-            <option value={30}>30 j</option>
-            <option value={60}>60 j</option>
           </select>
         </div>
       </div>
@@ -410,7 +408,7 @@ export default function App() {
                       return (
                         <th
                           key={i}
-                          className={`py-2 px-1 text-center border-b border-border/40 ${isToday ? "border-b-2 border-b-primary bg-primary/10 rounded-t-md" : ""}`}
+                          className={`py-2 px-1 text-center border-b border-border/40 ${isToday ? "border-b-2 border-b-primary bg-neutral-100 rounded-t-md" : ""}`}
                           style={{ minWidth: "52px" }}
                         >
                           <div

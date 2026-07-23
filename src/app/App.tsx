@@ -170,6 +170,14 @@ export default function App() {
     return { ...m, today: todayValue, tomorrow: tomorrowValue };
   });
 
+  const currentPluie = useMemo(() => {
+    const day = communeData[todaySerial];
+    const nextDay = communeData[tomorrowSerial];
+    const todayPluie = day?.pluie?.[hypothesis] as number | undefined;
+    const tomorrowPluie = nextDay?.pluie?.[hypothesis] as number | undefined;
+    return { today: todayPluie, tomorrow: tomorrowPluie };
+  }, [communeData, todaySerial, tomorrowSerial, hypothesis]);
+
   const toggleModel = (id: string) => {
     setActiveModels(prev => {
       const next = new Set(prev);
@@ -396,6 +404,48 @@ export default function App() {
               </div>
             );
           })}
+
+              <div className="mt-2 pt-2 border-t border-border/50">
+                <p className="text-[10px] font-semibold text-foreground/70 uppercase tracking-wider mb-2">
+                  Pluie
+                </p>
+                <div
+                  className="rounded-lg border p-3 cursor-default select-none"
+                  style={{ backgroundColor: "#f8fafc", borderColor: "#e2e8f0" }}
+                >
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#64748b" }} />
+                    <span className="text-xs font-semibold text-foreground/70">Aujourd'hui</span>
+                  </div>
+                  <div className="flex items-baseline gap-1.5">
+                    <span
+                      className="text-2xl font-bold leading-none tabular-nums"
+                      style={{ color: "#374151", fontFamily: "var(--font-display)" }}
+                    >
+                      {currentPluie.today !== undefined ? currentPluie.today.toFixed(1) : "N/A"}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground">mm</span>
+                  </div>
+                </div>
+                <div
+                  className="rounded-lg border p-3 mt-2 cursor-default select-none"
+                  style={{ backgroundColor: "#f8fafc", borderColor: "#e2e8f0" }}
+                >
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#94a3b8" }} />
+                    <span className="text-xs font-semibold text-foreground/70">Demain</span>
+                  </div>
+                  <div className="flex items-baseline gap-1.5">
+                    <span
+                      className="text-2xl font-bold leading-none tabular-nums"
+                      style={{ color: "#374151", fontFamily: "var(--font-display)" }}
+                    >
+                      {currentPluie.tomorrow !== undefined ? currentPluie.tomorrow.toFixed(1) : "N/A"}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground">mm</span>
+                  </div>
+                </div>
+              </div>
         </aside>
 
         {/* Main content */}

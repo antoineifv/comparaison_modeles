@@ -68,7 +68,7 @@ const LOCATIONS = COMMUNES.map(name => {
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 function RiskCell({ level, showLabel = false, isToday = false }: { level?: number; showLabel?: boolean; isToday?: boolean }) {
-  if (level === undefined) {
+  if (level == null) {
     return (
       <td className="border border-border/30 p-1.5 text-center transition-colors">
         <span className="text-[10px] text-muted-foreground font-medium">N/A</span>
@@ -166,7 +166,7 @@ export default function App() {
     const nextDay = communeData[tomorrowSerial];
     const todayValue = day?.[m.id as keyof CommuneDay]?.[hypothesis] as number | undefined;
     const tomorrowValue = nextDay?.[m.id as keyof CommuneDay]?.[hypothesis] as number | undefined;
-    return { ...m, today: todayValue ?? 0, tomorrow: tomorrowValue ?? 0 };
+    return { ...m, today: todayValue, tomorrow: tomorrowValue };
   });
 
   const toggleModel = (id: string) => {
@@ -352,8 +352,8 @@ export default function App() {
 
           {currentRisk.map(m => {
             const active = activeModels.has(m.id);
-            const r = m.today !== undefined ? RISK[m.today] : undefined;
-            const tr = m.tomorrow !== undefined ? RISK[m.tomorrow] : undefined;
+            const r = m.today != null ? RISK[m.today] : undefined;
+            const tr = m.tomorrow != null ? RISK[m.tomorrow] : undefined;
             return (
               <div
                 key={m.id}
@@ -368,7 +368,7 @@ export default function App() {
                   <span className="text-xs font-semibold text-foreground/70">{m.name}</span>
                 </div>
                 <div className="flex items-end gap-2">
-                  {m.today !== undefined ? (
+                  {m.today != null ? (
                     <>
                       <span
                         className="text-4xl font-bold leading-none tabular-nums"
@@ -386,7 +386,7 @@ export default function App() {
                 </div>
                 <div className="mt-2 text-xs text-muted-foreground flex items-center gap-1">
                   <span>Demain :</span>
-                  {m.tomorrow !== undefined ? (
+                  {m.tomorrow != null ? (
                     <RiskBadge level={m.tomorrow} size="sm" />
                   ) : (
                     <span className="text-[10px] text-muted-foreground">N/A</span>

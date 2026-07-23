@@ -42,6 +42,7 @@ type CommuneDay = {
   potsys?: Record<string, number>;
   milvit?: Record<string, number>;
   milstop?: Record<string, number>;
+  pluie?: Record<string, number>;
 };
 
 const COMMUNES: string[] = riskData.communes;
@@ -445,7 +446,42 @@ export default function App() {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* Model rows */}
+                  {/* Meteo row */}
+                  <tr>
+                    <td
+                      className="py-2 pr-4 text-xs font-semibold sticky left-0 bg-background z-10 border-r border-border whitespace-nowrap"
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: "#64748b" }} />
+                        Pluie
+                      </div>
+                      <span className="text-[10px] text-muted-foreground font-normal">(mm)</span>
+                    </td>
+                    {visibleSerials.map((serial, ci) => {
+                      const day = communeData[serial];
+                      const pluieVal = day?.pluie?.[hypothesis] as number | undefined;
+                      const globalIdx = visibleRange.start + ci;
+                      const isTodayCell = globalIdx === TODAY_INDEX;
+                      const bg = isTodayCell && pluieVal !== undefined ? "#eff6ff" : "#f1f5f9";
+                      return (
+                        <td
+                          key={serial}
+                          className="border border-border/30 p-1.5 text-center transition-colors"
+                          style={{ backgroundColor: bg }}
+                        >
+                          <div className="flex flex-col items-center gap-0.5">
+                            <span
+                              className="font-semibold text-sm leading-none"
+                              style={{ fontFamily: "var(--font-mono)", color: "#374151" }}
+                            >
+                              {pluieVal !== undefined ? pluieVal.toFixed(1) : "N/A"}
+                            </span>
+                          </div>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                {/* Model rows */}
                   {MODELS.filter(m => activeModels.has(m.id)).map(m => (
                     <tr key={m.id}>
                       <td

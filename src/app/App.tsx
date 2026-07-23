@@ -68,19 +68,24 @@ const LOCATIONS = COMMUNES.map(name => {
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 function RiskCell({ level, showLabel = false, isToday = false }: { level?: number; showLabel?: boolean; isToday?: boolean }) {
-  if (level === undefined) return <td className="border border-border/30 p-2 text-center" />;
+  if (level === undefined) {
+    return (
+      <td className="border border-border/30 p-1.5 text-center transition-colors">
+        <span className="text-[10px] text-muted-foreground font-medium">N/A</span>
+      </td>
+    );
+  }
   const r = RISK[level];
-  const bg = isToday ? "#eff6ff" : r.bg;
   return (
     <td
       className="border border-border/30 p-1.5 text-center transition-colors"
-      style={{ backgroundColor: bg, boxShadow: isToday ? "inset 0 0 0 1px #3b82f6" : undefined }}
+      style={{ backgroundColor: r.bg }}
     >
       <div className="flex flex-col items-center gap-0.5">
         <span
           className="font-semibold text-sm leading-none"
           style={{ color: r.text, fontFamily: "var(--font-mono)" }}
-        >
+        > 
           {level}
         </span>
         {showLabel && (
@@ -347,7 +352,8 @@ export default function App() {
 
           {currentRisk.map(m => {
             const active = activeModels.has(m.id);
-            const r = RISK[m.today];
+            const r = m.today !== undefined ? RISK[m.today] : undefined;
+            const tr = m.tomorrow !== undefined ? RISK[m.tomorrow] : undefined;
             return (
               <div
                 key={m.id}
@@ -355,26 +361,36 @@ export default function App() {
                 className={`flex-shrink-0 rounded-lg border p-3.5 cursor-pointer transition-all select-none ${
                   active ? "border-border shadow-sm" : "opacity-35"
                 }`}
-                style={{ backgroundColor: active ? r.bg : "#f8f8f8", borderColor: active ? r.border : "#e5e7eb" }}
+                style={{ backgroundColor: active ? (r ? r.bg : "#f1f5f9") : "#f8f8f8", borderColor: active ? (r ? r.border : "#cbd5e1") : "#e5e7eb" }}
               >
                 <div className="flex items-center gap-2 mb-2.5">
                   <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: m.color }} />
                   <span className="text-xs font-semibold text-foreground/70">{m.name}</span>
                 </div>
                 <div className="flex items-end gap-2">
-                  <span
-                    className="text-4xl font-bold leading-none tabular-nums"
-                    style={{ color: r.text, fontFamily: "var(--font-display)" }}
-                  >
-                    {m.today}
-                  </span>
-                  <span className="text-xs font-medium pb-0.5" style={{ color: r.text }}>
-                    {r.label}
-                  </span>
+                  {m.today !== undefined ? (
+                    <>
+                      <span
+                        className="text-4xl font-bold leading-none tabular-nums"
+                        style={{ color: r.text, fontFamily: "var(--font-display)" }}
+                      >
+                        {m.today}
+                      </span>
+                      <span className="text-xs font-medium pb-0.5" style={{ color: r.text }}>
+                        {r.label}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-xl font-semibold text-muted-foreground">N/A</span>
+                  )}
                 </div>
                 <div className="mt-2 text-xs text-muted-foreground flex items-center gap-1">
                   <span>Demain :</span>
-                  <RiskBadge level={m.tomorrow} size="sm" />
+                  {m.tomorrow !== undefined ? (
+                    <RiskBadge level={m.tomorrow} size="sm" />
+                  ) : (
+                    <span className="text-[10px] text-muted-foreground">N/A</span>
+                  )}
                 </div>
               </div>
             );

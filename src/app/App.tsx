@@ -119,7 +119,14 @@ function RiskBadge({ level, size = "md" }: { level: number; size?: "sm" | "md" |
 export default function App() {
   const [activeModels, setActiveModels] = useState<Set<string>>(new Set(MODELS.map(m => m.id)));
   const [hypothesis, setHypothesis] = useState<"h1" | "h2" | "h3">("h2");
-  const [location, setLocation] = useState(LOCATIONS[0]);
+  const { commune } = useParams();
+  const navigate = useNavigate();
+  const [location, setLocation] = useState(() => {
+    if (commune && LOCATIONS.some(l => l.name === commune)) {
+      return LOCATIONS.find(l => l.name === commune)!;
+    }
+    return LOCATIONS[0];
+  });
   const [locationOpen, setLocationOpen] = useState(false);
   const [pastDays, setPastDays] = useState(21);
   const [futureDays, setFutureDays] = useState(14);
@@ -177,6 +184,12 @@ export default function App() {
     const tomorrowPluie = nextDay?.pluie?.[hypothesis] as number | undefined;
     return { today: todayPluie, tomorrow: tomorrowPluie };
   }, [communeData, todaySerial, tomorrowSerial, hypothesis]);
+
+  useEffect(() => {
+    if (location.name !== commune) {
+      navigate("/" + encodeURIComponent(location.name), { replace: true });
+    }
+  }, [location.name, commune, navigate]);
 
   const toggleModel = (id: string) => {
     setActiveModels(prev => {

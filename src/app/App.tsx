@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { MapPin, ChevronDown, Leaf, CalendarDays } from "lucide-react";
@@ -119,9 +119,9 @@ function RiskBadge({ level, size = "md" }: { level: number; size?: "sm" | "md" |
 export default function App() {
   const [activeModels, setActiveModels] = useState<Set<string>>(new Set(MODELS.map(m => m.id)));
   const [hypothesis, setHypothesis] = useState<"h1" | "h2" | "h3">("h2");
-  const { commune } = useParams();
-  const navigate = useNavigate();
   const [location, setLocation] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const commune = params.get("commune");
     if (commune && LOCATIONS.some(l => l.name === commune)) {
       return LOCATIONS.find(l => l.name === commune)!;
     }
@@ -186,10 +186,13 @@ export default function App() {
   }, [communeData, todaySerial, tomorrowSerial, hypothesis]);
 
   useEffect(() => {
-    if (location.name !== commune) {
-      navigate("/" + encodeURIComponent(location.name), { replace: true });
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("commune") !== location.name) {
+      const url = new URL(window.location.href);
+      url.searchParams.set("commune", location.name);
+      window.history.replaceState({}, "", url.toString());
     }
-  }, [location.name, commune, navigate]);
+  }, [location.name]);
 
   const toggleModel = (id: string) => {
     setActiveModels(prev => {

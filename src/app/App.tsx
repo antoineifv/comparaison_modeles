@@ -223,11 +223,8 @@ export default function App() {
               className="text-xl font-semibold tracking-tight leading-none"
               style={{ fontFamily: "var(--font-display)", color: "#1c2b1c" }}
             >
-              VitiRisque
+              Comparaison des modèles
             </h1>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Prévisions épidémiologiques des cultures viticoles
-            </p>
           </div>
         </div>
 

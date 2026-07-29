@@ -3,7 +3,7 @@
 :root {
   --font-size: 15px;
   --font-display: 'Open Sans', system-ui, sans-serif;
-  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-sans: 'Courier New', monospace;
   --font-numbers: 'Courier New', monospace;
   --font-mono: 'JetBrains Mono', 'Courier New', monospace;
 

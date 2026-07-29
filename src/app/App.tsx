@@ -368,7 +368,7 @@ export default function App() {
               Risque aujourd'hui
             </p>
             <p className="text-xs text-muted-foreground mt-0.5">
-              {location.name} · {HYPOTHESES.find(h => h.id === hypothesis)?.label}
+              {location.name} • {HYPOTHESES.find(h => h.id === hypothesis)?.label}
             </p>
           </div>
 
@@ -467,7 +467,7 @@ export default function App() {
 
           <div className="flex items-center border-b border-border gap-0 -mb-1 pb-2">
             <span className="text-xs text-muted-foreground" style={{ fontFamily: "var(--font-sans)" }}>
-              {location.name} · Mildiou de la vigne · {HYPOTHESES.find(h => h.id === hypothesis)?.label}
+              {location.name} • Mildiou de la vigne • {HYPOTHESES.find(h => h.id === hypothesis)?.label}
             </span>
           </div>
 
@@ -578,7 +578,7 @@ export default function App() {
 
               <p className="text-xs text-muted-foreground mt-4" style={{ fontFamily: "var(--font-sans)" }}>
                 Mildiou de la vigne • {location.name}, {location.region} •{" "}
-                Classe 0 = Nul · 1 = Faible · 2 = Moyen · 3 = Fort · 4 = Très fort
+                Classe 0 = Nul • 1 = Faible • 2 = Moyen • 3 = Fort • 4 = Très fort
               </p>
             </div>
         </main>

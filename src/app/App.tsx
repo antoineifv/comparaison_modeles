@@ -250,7 +250,7 @@ export default function App() {
             <span className="font-medium">{location.name}</span>
             <span
               className="text-muted-foreground text-xs hidden sm:inline"
-              style={{ fontFamily: "var(--font-mono)" }}
+              style={{ fontFamily: "var(--font-sans)" }}
             >
               {location.lat}
             </span>
@@ -466,7 +466,7 @@ export default function App() {
         <main className="flex-1 flex flex-col p-5 gap-4 min-w-0 bg-background overflow-auto">
 
           <div className="flex items-center border-b border-border gap-0 -mb-1 pb-2">
-            <span className="text-xs text-muted-foreground" style={{ fontFamily: "var(--font-mono)" }}>
+            <span className="text-xs text-muted-foreground" style={{ fontFamily: "var(--font-sans)" }}>
               {location.name} · Mildiou de la vigne · {HYPOTHESES.find(h => h.id === hypothesis)?.label}
             </span>
           </div>
@@ -494,13 +494,13 @@ export default function App() {
                         >
                           <div
                             className={`text-[10px] leading-tight ${isToday ? "text-primary font-bold" : "text-muted-foreground"}`}
-                            style={{ fontFamily: "var(--font-mono)" }}
+                            style={{ fontFamily: "var(--font-sans)" }}
                           >
                             {format(d, "d MMM", { locale: fr })}
                           </div>
                           <div
                             className={`text-[9px] leading-tight ${isToday ? "text-primary font-semibold" : "text-muted-foreground/60"}`}
-                            style={{ fontFamily: "var(--font-mono)" }}
+                            style={{ fontFamily: "var(--font-sans)" }}
                           >
                             {isToday ? "auj." : isForecast ? "prévu" : ""}
                           </div>
@@ -576,7 +576,7 @@ export default function App() {
                 </tbody>
               </table>
 
-              <p className="text-xs text-muted-foreground mt-4" style={{ fontFamily: "var(--font-mono)" }}>
+              <p className="text-xs text-muted-foreground mt-4" style={{ fontFamily: "var(--font-sans)" }}>
                 Mildiou de la vigne · {location.name}, {location.region} ·{" "}
                 Classe 0 = Nul · 1 = Faible · 2 = Moyen · 3 = Fort · 4 = Très fort
               </p>

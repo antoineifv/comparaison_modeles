@@ -228,7 +228,7 @@ export default function App() {
           </div>
         </div>
 
-        <div className="flex items-center gap-4 text-xs text-muted-foreground" style={{ fontFamily: "var(--font-mono)" }}>
+        <div className="flex items-center gap-4 text-xs text-muted-foreground" style={{ fontFamily: "var(--font-sans)" }}>
           <span className="hidden sm:block">Mis à jour : {format(new Date(), "d MMMM yyyy, HH:mm", { locale: fr, timeZone: "Europe/Paris" })} (Paris)</span>
           <span className="flex items-center gap-1.5 text-emerald-700 font-medium">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />

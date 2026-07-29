@@ -2,8 +2,9 @@
 
 :root {
   --font-size: 15px;
-  --font-display: 'Spectral', Georgia, serif;
+  --font-display: 'Open Sans', system-ui, sans-serif;
   --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-numbers: 'Courier New', monospace;
   --font-mono: 'JetBrains Mono', 'Courier New', monospace;
 
   --background: #f6f8f4;

@@ -387,7 +387,7 @@ export default function App() {
                   <div className="flex items-baseline gap-1.5">
                     <span
                       className="text-2xl font-bold leading-none tabular-nums"
-                      style={{ color: "#374151", fontFamily: "var(--font-display)" }}
+                      style={{ color: "#374151", fontFamily: "var(--font-numbers)" }}
                     >
                       {currentPluie.today !== undefined ? currentPluie.today.toFixed(1) : "N/A"}
                     </span>
@@ -405,7 +405,7 @@ export default function App() {
                   <div className="flex items-baseline gap-1.5">
                     <span
                       className="text-2xl font-bold leading-none tabular-nums"
-                      style={{ color: "#374151", fontFamily: "var(--font-display)" }}
+                      style={{ color: "#374151", fontFamily: "var(--font-numbers)" }}
                     >
                       {currentPluie.tomorrow !== undefined ? currentPluie.tomorrow.toFixed(1) : "N/A"}
                     </span>
@@ -435,7 +435,7 @@ export default function App() {
                     <>
                       <span
                         className="text-4xl font-bold leading-none tabular-nums"
-                        style={{ color: r.text, fontFamily: "var(--font-display)" }}
+                        style={{ color: r.text, fontFamily: "var(--font-numbers)" }}
                       >
                         {m.today}
                       </span>

@@ -3,31 +3,49 @@
     "ARS",
     "ARVERT",
     "ASNIERES-SUR-NOUERE",
+    "BELLOCQ",
+    "BERGERAC",
     "BLANZAC-PORCHERESSE",
+    "BOISSE",
     "BREVILLE",
     "CHAMPNIERS",
     "CHERAC",
+    "CLASSUN",
+    "COCUMONT",
     "COZES",
     "GENAC",
     "GIVREZAC",
+    "HAUX",
+    "IROULEGUY",
     "JONZAC",
+    "JURANCON",
     "LE GRAND-VILLAGE-PLAGE",
     "LES PORTES-EN-RE",
     "MALAVILLE",
     "MARIGNAC",
     "MATHA",
     "MEURSAC",
+    "MONBAZILLAC",
+    "MONTESQUIEU",
     "MORTAGNE-SUR-GIRONDE",
     "MOULIDARS",
+    "NEAC",
+    "PAREMPUYRE",
+    "POMPIGNAC",
     "REIGNAC",
+    "RIOCAUD",
     "ROUILLAC",
+    "SAINT-EMILION",
+    "SAINT-ETIENNE-DE-BAIGORRY",
     "SAINT-FORT-SUR-GIRONDE",
     "SAINT-GEORGES-D''OLERON",
     "SAINT-MARTIN-D''ARY",
     "SAINT-MARTIN-DE-COUX",
     "SAINT-PIERRE-DE-JUILLERS",
     "SAINTES",
-    "SEGONZAC"
+    "SAUTERNES",
+    "SEGONZAC",
+    "VENSAC"
   ],
   "dates": [
     "46023",
@@ -245,7 +263,8 @@
     "46235",
     "46236",
     "46237",
-    "46238"
+    "46238",
+    "NaN"
   ],
   "byCommune": {
     "SAINT-MARTIN-DE-COUX": {
@@ -162754,6 +162773,422 @@
           "h1": 1,
           "h2": 1,
           "h3": 2
+        },
+        "milstop": {},
+        "milvit": {},
+        "pluie": {}
+      }
+    },
+    "SAINT-EMILION": {
+      "NaN": {
+        "latitude": "44.884",
+        "longitude": "-0.163",
+        "region": 33,
+        "rossi": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 1
+        },
+        "potsys": {
+          "h1": 2,
+          "h2": 2,
+          "h3": 4
+        },
+        "milstop": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 1
+        },
+        "milvit": {
+          "h1": 2,
+          "h2": 2,
+          "h3": 2
+        },
+        "pluie": {
+          "h1": 0.123,
+          "h2": 0.246,
+          "h3": 0.8670000000000001
+        }
+      }
+    },
+    "NEAC": {
+      "NaN": {
+        "latitude": "44.956",
+        "longitude": "-0.175",
+        "region": 33,
+        "rossi": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 1
+        },
+        "potsys": {
+          "h1": 4,
+          "h2": 4,
+          "h3": 4
+        },
+        "milstop": {
+          "h1": 1,
+          "h2": 2,
+          "h3": 1
+        },
+        "milvit": {
+          "h1": 2,
+          "h2": 1,
+          "h3": 3
+        },
+        "pluie": {
+          "h1": 0.123,
+          "h2": 0.246,
+          "h3": 0.8670000000000001
+        }
+      }
+    },
+    "SAUTERNES": {
+      "NaN": {
+        "latitude": "44.536",
+        "longitude": "-0.331",
+        "region": 33,
+        "rossi": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 1
+        },
+        "potsys": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 1
+        },
+        "milstop": {
+          "h1": 3,
+          "h2": 1,
+          "h3": 2
+        },
+        "milvit": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 2
+        },
+        "pluie": {
+          "h1": 0.606,
+          "h2": 1.212,
+          "h3": 3.03
+        }
+      }
+    },
+    "HAUX": {
+      "NaN": {
+        "latitude": "44.74",
+        "longitude": "-0.355",
+        "region": 33,
+        "rossi": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 1
+        },
+        "potsys": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 2
+        },
+        "milstop": {
+          "h1": 2,
+          "h2": 1,
+          "h3": 3
+        },
+        "milvit": {
+          "h1": 2,
+          "h2": 1,
+          "h3": 1
+        },
+        "pluie": {
+          "h1": 0.543,
+          "h2": 1.08,
+          "h3": 3.791
+        }
+      }
+    },
+    "JURANCON": {
+      "NaN": {
+        "latitude": "43.264",
+        "longitude": "-0.391",
+        "region": 33,
+        "rossi": {},
+        "potsys": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 2
+        },
+        "milstop": {},
+        "milvit": {},
+        "pluie": {}
+      }
+    },
+    "CLASSUN": {
+      "NaN": {
+        "latitude": "43.72",
+        "longitude": "-0.403",
+        "region": 33,
+        "rossi": {},
+        "potsys": {
+          "h1": 2,
+          "h2": 2,
+          "h3": 4
+        },
+        "milstop": {},
+        "milvit": {},
+        "pluie": {}
+      }
+    },
+    "POMPIGNAC": {
+      "NaN": {
+        "latitude": "44.86",
+        "longitude": "-0.451",
+        "region": 33,
+        "rossi": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 1
+        },
+        "potsys": {
+          "h1": 4,
+          "h2": 4,
+          "h3": 4
+        },
+        "milstop": {
+          "h1": 3,
+          "h2": 1,
+          "h3": 1
+        },
+        "milvit": {
+          "h1": 2,
+          "h2": 2,
+          "h3": 1
+        },
+        "pluie": {
+          "h1": 0.543,
+          "h2": 1.08,
+          "h3": 3.791
+        }
+      }
+    },
+    "PAREMPUYRE": {
+      "NaN": {
+        "latitude": "44.956",
+        "longitude": "-0.595",
+        "region": 33,
+        "rossi": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 1
+        },
+        "potsys": {
+          "h1": 2,
+          "h2": 2,
+          "h3": 4
+        },
+        "milstop": {
+          "h1": 1,
+          "h2": 2,
+          "h3": 1
+        },
+        "milvit": {
+          "h1": 1,
+          "h2": 3,
+          "h3": 2
+        },
+        "pluie": {
+          "h1": 0.114,
+          "h2": 0.228,
+          "h3": 0.8039999999999999
+        }
+      }
+    },
+    "BELLOCQ": {
+      "NaN": {
+        "latitude": "43.516",
+        "longitude": "-0.931",
+        "region": 33,
+        "rossi": {},
+        "potsys": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 3
+        },
+        "milstop": {},
+        "milvit": {},
+        "pluie": {}
+      }
+    },
+    "VENSAC": {
+      "NaN": {
+        "latitude": "45.4",
+        "longitude": "-1.039",
+        "region": 33,
+        "rossi": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 1
+        },
+        "potsys": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 2
+        },
+        "milstop": {
+          "h1": 2,
+          "h2": 2,
+          "h3": 1
+        },
+        "milvit": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 1
+        },
+        "pluie": {
+          "h1": 0.114,
+          "h2": 0.228,
+          "h3": 0.8039999999999999
+        }
+      }
+    },
+    "IROULEGUY": {
+      "NaN": {
+        "latitude": "43.168",
+        "longitude": "-1.303",
+        "region": 33,
+        "rossi": {},
+        "potsys": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 2
+        },
+        "milstop": {},
+        "milvit": {},
+        "pluie": {}
+      }
+    },
+    "SAINT-ETIENNE-DE-BAIGORRY": {
+      "NaN": {
+        "latitude": "43.192",
+        "longitude": "-1.339",
+        "region": 33,
+        "rossi": {},
+        "potsys": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 2
+        },
+        "milstop": {},
+        "milvit": {},
+        "pluie": {}
+      }
+    },
+    "COCUMONT": {
+      "NaN": {
+        "latitude": "44.452",
+        "longitude": "0.029",
+        "region": 33,
+        "rossi": {},
+        "potsys": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 2
+        },
+        "milstop": {},
+        "milvit": {},
+        "pluie": {}
+      }
+    },
+    "RIOCAUD": {
+      "NaN": {
+        "latitude": "44.776",
+        "longitude": "0.197",
+        "region": 33,
+        "rossi": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 1
+        },
+        "potsys": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 2
+        },
+        "milstop": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 2
+        },
+        "milvit": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 1
+        },
+        "pluie": {
+          "h1": 0.543,
+          "h2": 1.08,
+          "h3": 3.791
+        }
+      }
+    },
+    "MONTESQUIEU": {
+      "NaN": {
+        "latitude": "44.212",
+        "longitude": "0.449",
+        "region": 33,
+        "rossi": {},
+        "potsys": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 2
+        },
+        "milstop": {},
+        "milvit": {},
+        "pluie": {}
+      }
+    },
+    "MONBAZILLAC": {
+      "NaN": {
+        "latitude": "44.788",
+        "longitude": "0.485",
+        "region": 33,
+        "rossi": {},
+        "potsys": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 2
+        },
+        "milstop": {},
+        "milvit": {},
+        "pluie": {}
+      }
+    },
+    "BERGERAC": {
+      "NaN": {
+        "latitude": "44.872",
+        "longitude": "0.509",
+        "region": 33,
+        "rossi": {},
+        "potsys": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 1
+        },
+        "milstop": {},
+        "milvit": {},
+        "pluie": {}
+      }
+    },
+    "BOISSE": {
+      "NaN": {
+        "latitude": "44.716",
+        "longitude": "0.665",
+        "region": 33,
+        "rossi": {},
+        "potsys": {
+          "h1": 1,
+          "h2": 1,
+          "h3": 1
         },
         "milstop": {},
         "milvit": {},

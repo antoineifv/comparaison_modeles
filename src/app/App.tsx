@@ -128,6 +128,7 @@ export default function App() {
     return LOCATIONS[0];
   });
   const [locationOpen, setLocationOpen] = useState(false);
+  const [regionOpen, setRegionOpen] = useState(false);
   const [regionFilter, setRegionFilter] = useState<string | null>(null);
   const filteredLocations = regionFilter
     ? LOCATIONS.filter(l => l.region === regionFilter)
@@ -279,17 +280,26 @@ export default function App() {
 
         {/* Region filter */}
         <div className="relative" onClick={e => e.stopPropagation()}>
-          <select
-            value={regionFilter ?? ""}
-            onChange={e => setRegionFilter(e.target.value || null)}
-            className="flex items-center gap-2 border border-border rounded-md px-3 py-1.5 text-sm bg-background hover:border-primary/50 transition-colors appearance-none cursor-pointer"
-            style={{ minWidth: "100px" }}
+          <button
+            onClick={() => setRegionOpen(v => !v)}
+            className="flex items-center gap-2 border border-border rounded-md px-3 py-1.5 text-sm bg-background hover:border-primary/50 transition-colors"
           >
-            <option value="">Toutes régions</option>
-            {[...new Set(LOCATIONS.map(l => l.region).filter(Boolean))].sort((a, b) => Number(a) - Number(b)).map(r => (
-              <option key={r} value={r}>{r}</option>
-            ))}
-          </select>
+            <span className="font-medium">{regionFilter ?? 'Région'}</span>
+            <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
+          </button>
+          {regionOpen && (
+            <div className="absolute top-full left-0 mt-1 z-30 bg-card border border-border rounded-lg shadow-xl min-w-32 py-1 max-h-64 overflow-y-auto">
+              {[...new Set(LOCATIONS.map(l => l.region).filter(Boolean))].sort((a, b) => Number(a) - Number(b)).map(r => (
+                <button
+                  key={r}
+                  onClick={() => { setRegionFilter(r); setRegionOpen(false); }}
+                  className={"w-full text-left px-4 py-2 text-sm hover:bg-secondary transition-colors " + (regionFilter === r ? 'text-primary font-semibold' : '')}
+                >
+                  <span>{r}</span>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">

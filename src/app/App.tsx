@@ -257,7 +257,7 @@ export default function App() {
             <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
           </button>
           {locationOpen && (
-            <div className="absolute top-full left-0 mt-1 z-30 bg-card border border-border rounded-lg shadow-xl min-w-64 py-1">
+            <div className="absolute top-full left-0 mt-1 z-30 bg-card border border-border rounded-lg shadow-xl min-w-64 py-1 max-h-80 overflow-y-auto">
               {LOCATIONS.map(loc => (
                 <button
                   key={loc.name}

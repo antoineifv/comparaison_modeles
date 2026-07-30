@@ -129,7 +129,15 @@ export default function App() {
   });
   const [locationOpen, setLocationOpen] = useState(false);
   const [regionOpen, setRegionOpen] = useState(false);
-  const [regionFilter, setRegionFilter] = useState<string | null>(null);
+  const [regionFilter, setRegionFilter] = useState<string | null>(() => {
+    const params = new URLSearchParams(window.location.search);
+    const commune = params.get("commune");
+    if (commune) {
+      const loc = LOCATIONS.find(l => l.name === commune);
+      if (loc) return loc.region;
+    }
+    return null;
+  });
   const filteredLocations = regionFilter
     ? LOCATIONS.filter(l => l.region === regionFilter)
     : LOCATIONS;
@@ -199,6 +207,13 @@ export default function App() {
       window.history.replaceState({}, "", url.toString());
     }
   }, [location.name]);
+
+  useEffect(() => {
+    const loc = LOCATIONS.find(l => l.name === location.name);
+    if (loc && loc.region !== regionFilter) {
+      setRegionFilter(loc.region);
+    }
+  }, [location.name, regionFilter]);
 
   const toggleModel = (id: string) => {
     setActiveModels(prev => {

@@ -208,13 +208,6 @@ export default function App() {
     }
   }, [location.name]);
 
-  useEffect(() => {
-    const loc = LOCATIONS.find(l => l.name === location.name);
-    if (loc && loc.region !== regionFilter) {
-      setRegionFilter(loc.region);
-    }
-  }, [location.name, regionFilter]);
-
   const toggleModel = (id: string) => {
     setActiveModels(prev => {
       const next = new Set(prev);

@@ -128,6 +128,11 @@ export default function App() {
     return LOCATIONS[0];
   });
   const [locationOpen, setLocationOpen] = useState(false);
+  const [regionFilter, setRegionFilter] = useState<string | null>(null);
+  const filteredLocations = regionFilter
+    ? LOCATIONS.filter(l => l.region === regionFilter)
+    : LOCATIONS;
+
   const [pastDays, setPastDays] = useState(21);
   const [futureDays, setFutureDays] = useState(14);
 
@@ -258,7 +263,7 @@ export default function App() {
           </button>
           {locationOpen && (
             <div className="absolute top-full left-0 mt-1 z-30 bg-card border border-border rounded-lg shadow-xl min-w-64 py-1 max-h-[28rem] overflow-y-auto">
-              {LOCATIONS.map(loc => (
+              {filteredLocations.map(loc => (
                 <button
                   key={loc.name}
                   onClick={() => { setLocation(loc); setLocationOpen(false); }}
@@ -270,6 +275,21 @@ export default function App() {
               ))}
             </div>
           )}
+        </div>
+
+        {/* Region filter */}
+        <div className="relative" onClick={e => e.stopPropagation()}>
+          <select
+            value={regionFilter ?? ""}
+            onChange={e => setRegionFilter(e.target.value || null)}
+            className="flex items-center gap-2 border border-border rounded-md px-3 py-1.5 text-sm bg-background hover:border-primary/50 transition-colors appearance-none cursor-pointer"
+            style={{ minWidth: "100px" }}
+          >
+            <option value="">Toutes régions</option>
+            {[...new Set(LOCATIONS.map(l => l.region).filter(Boolean))].sort((a, b) => Number(a) - Number(b)).map(r => (
+              <option key={r} value={r}>{r}</option>
+            ))}
+          </select>
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">

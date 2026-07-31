@@ -129,6 +129,7 @@ export default function App() {
   });
   const [locationOpen, setLocationOpen] = useState(false);
   const [regionOpen, setRegionOpen] = useState(false);
+  const SORTED_REGIONS = [...new Set(LOCATIONS.map(l => l.region).filter(Boolean))].sort((a, b) => Number(a) - Number(b));
   const [regionFilter, setRegionFilter] = useState<string | null>(() => {
     const params = new URLSearchParams(window.location.search);
     const commune = params.get("commune");
@@ -136,7 +137,7 @@ export default function App() {
       const loc = LOCATIONS.find(l => l.name === commune);
       if (loc) return loc.region;
     }
-    return null;
+    return SORTED_REGIONS[0] ?? null;
   });
   const filteredLocations = regionFilter
     ? LOCATIONS.filter(l => l.region === regionFilter)
@@ -297,7 +298,7 @@ export default function App() {
           </button>
           {regionOpen && (
             <div className="absolute top-full left-0 mt-1 z-30 bg-card border border-border rounded-lg shadow-xl min-w-32 py-1 max-h-64 overflow-y-auto">
-              {[...new Set(LOCATIONS.map(l => l.region).filter(Boolean))].sort((a, b) => Number(a) - Number(b)).map(r => (
+              {SORTED_REGIONS.map(r => (
                 <button
                   key={r}
                   onClick={() => { setRegionFilter(r); setRegionOpen(false); }}

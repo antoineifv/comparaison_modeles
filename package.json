@@ -5,7 +5,8 @@
     "type":  "module",
     "scripts":  {
                     "build":  "vite build",
-                    "dev":  "vite"
+                    "dev":  "vite",
+                    "build-data":  "python scripts/generate_risk_data.py"
                 },
     "dependencies":  {
                          "@emotion/react":  "11.14.0",

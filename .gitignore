@@ -2,6 +2,10 @@
 dist/
 .vite/
 *.log
+# temp scripts
+tmp_*.py
+__pycache__/
+
 
 # fichiers verrouillés / données locale
 # verrous Excel temporaires
@@ -9,4 +13,6 @@ dist/
 # pnpm (on utilise npm)
 pnpm-lock.yaml
 pnpm-workspace.yaml
+# lockfile regenere par la CI (evite les deps specifiques a Windows)
+package-lock.json
 

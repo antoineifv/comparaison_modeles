@@ -121,19 +121,15 @@ export default function App() {
   const [hypothesis, setHypothesis] = useState<"h1" | "h2" | "h3">("h2");
   const [location, setLocation] = useState(() => {
     const params = new URLSearchParams(window.location.search);
-    const commune = params.get("commune");
     const region = params.get("region");
+    if (region) {
+      const regionLocs = LOCATIONS.filter(l => l.region === region);
+      if (regionLocs.length > 0) return regionLocs[0];
+    }
+    const commune = params.get("commune");
     if (commune) {
       const loc = LOCATIONS.find(l => l.name === commune);
-      if (loc) {
-        if (region && loc.region !== region) {
-          return LOCATIONS.filter(l => l.region === region)[0] ?? loc;
-        }
-        return loc;
-      }
-    }
-    if (region) {
-      return LOCATIONS.filter(l => l.region === region)[0] ?? LOCATIONS[0];
+      if (loc) return loc;
     }
     return LOCATIONS[0];
   });

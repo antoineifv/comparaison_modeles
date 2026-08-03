@@ -122,23 +122,36 @@ export default function App() {
   const [location, setLocation] = useState(() => {
     const params = new URLSearchParams(window.location.search);
     const commune = params.get("commune");
-    if (commune && LOCATIONS.some(l => l.name === commune)) {
-      return LOCATIONS.find(l => l.name === commune)!;
+    const region = params.get("region");
+    if (commune) {
+      const loc = LOCATIONS.find(l => l.name === commune);
+      if (loc) {
+        if (region && loc.region !== region) {
+          return LOCATIONS.filter(l => l.region === region)[0] ?? loc;
+        }
+        return loc;
+      }
+    }
+    if (region) {
+      return LOCATIONS.filter(l => l.region === region)[0] ?? LOCATIONS[0];
     }
     return LOCATIONS[0];
   });
   const [locationOpen, setLocationOpen] = useState(false);
   const [regionOpen, setRegionOpen] = useState(false);
   const SORTED_REGIONS = [...new Set(LOCATIONS.map(l => l.region).filter(Boolean))].sort((a, b) => Number(a) - Number(b));
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlRegion = urlParams.get("region");
   const [regionFilter, setRegionFilter] = useState<string | null>(() => {
-    const params = new URLSearchParams(window.location.search);
-    const commune = params.get("commune");
+    if (urlRegion) return urlRegion;
+    const commune = urlParams.get("commune");
     if (commune) {
       const loc = LOCATIONS.find(l => l.name === commune);
       if (loc) return loc.region;
     }
     return SORTED_REGIONS[0] ?? null;
   });
+  const regionLocked = urlRegion !== null;
   const filteredLocations = regionFilter
     ? LOCATIONS.filter(l => l.region === regionFilter)
     : LOCATIONS;
@@ -287,29 +300,31 @@ export default function App() {
           )}
         </div>
 
-        {/* Region filter */}
-        <div className="relative" onClick={e => e.stopPropagation()}>
-          <button
-            onClick={() => setRegionOpen(v => !v)}
-            className="flex items-center gap-2 border border-border rounded-md px-3 py-1.5 text-sm bg-background hover:border-primary/50 transition-colors"
-          >
-            <span className="font-medium">{regionFilter ?? 'Région'}</span>
-            <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
-          </button>
-          {regionOpen && (
-            <div className="absolute top-full left-0 mt-1 z-30 bg-card border border-border rounded-lg shadow-xl min-w-32 py-1 max-h-64 overflow-y-auto">
-              {SORTED_REGIONS.map(r => (
-                <button
-                  key={r}
-                  onClick={() => { setRegionFilter(r); setRegionOpen(false); }}
-                  className={"w-full text-left px-4 py-2 text-sm hover:bg-secondary transition-colors " + (regionFilter === r ? 'text-primary font-semibold' : '')}
-                >
-                  <span>{r}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        {/* Region filter - hidden when locked via URL ?region= */}
+        {!regionLocked && (
+          <div className="relative" onClick={e => e.stopPropagation()}>
+            <button
+              onClick={() => setRegionOpen(v => !v)}
+              className="flex items-center gap-2 border border-border rounded-md px-3 py-1.5 text-sm bg-background hover:border-primary/50 transition-colors"
+            >
+              <span className="font-medium">{regionFilter ?? 'Région'}</span>
+              <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
+            </button>
+            {regionOpen && (
+              <div className="absolute top-full left-0 mt-1 z-30 bg-card border border-border rounded-lg shadow-xl min-w-32 py-1 max-h-64 overflow-y-auto">
+                {SORTED_REGIONS.map(r => (
+                  <button
+                    key={r}
+                    onClick={() => { setRegionFilter(r); setRegionOpen(false); }}
+                    className={"w-full text-left px-4 py-2 text-sm hover:bg-secondary transition-colors " + (regionFilter === r ? 'text-primary font-semibold' : '')}
+                  >
+                    <span>{r}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-xs text-muted-foreground mr-1">Modèles :</span>

@@ -347,13 +347,13 @@ function ConsensusChart({
               const visibleRight = el ? el.scrollLeft + el.clientWidth : SVG_W;
               const mx = mousePos.x - L;
               const my = mousePos.y - T;
-              let boxLeft = mx + 2;
+              let boxLeft = mx + 10;
               if (boxLeft + boxW > visibleRight - L - 8) {
                 boxLeft = mx - 8 - boxW;
               }
               boxLeft = Math.max(visibleLeft - L + 8, Math.min(boxLeft, visibleRight - L - boxW - 8));
               const tipX = boxLeft;
-              const tipY = Math.max(0, Math.min(my + 4, PLOT_H - boxH));
+              const tipY = Math.max(0, Math.min(my - boxH - 4, PLOT_H - boxH));
              return (
                <g>
                  <rect
@@ -602,15 +602,15 @@ const boxW = 130;
                const el = scrollRef.current;
                const visibleLeft = el?.scrollLeft ?? 0;
                const visibleRight = el ? el.scrollLeft + el.clientWidth : SVG_W;
-               const mx = mousePos.x - L;
-               const my = mousePos.y - T;
-               let boxLeft = mx + offset;
-               if (boxLeft + boxW > visibleRight - L - offset) {
-                 boxLeft = mx - offset - boxW;
-               }
-               boxLeft = Math.max(visibleLeft - L + offset, Math.min(boxLeft, visibleRight - L - boxW - offset));
-               const tipX = boxLeft - offset;
-               const tipY = Math.max(0, Math.min(my + 4, PLOT_H - boxH));
+const mx = mousePos.x - L;
+                const my = mousePos.y - T;
+                let boxLeft = mx + 10;
+                if (boxLeft + boxW > visibleRight - L - offset) {
+                  boxLeft = mx - offset - boxW;
+                }
+                boxLeft = Math.max(visibleLeft - L + offset, Math.min(boxLeft, visibleRight - L - boxW - offset));
+                const tipX = boxLeft - offset;
+                const tipY = Math.max(0, Math.min(my - boxH - 4, PLOT_H - boxH));
               return (
                 <g>
                   <rect

@@ -1032,7 +1032,6 @@ export default function App() {
               </div>
 
               {/* ── Heatmap ── */}
-              <div className="overflow-x-auto">
               <table className="border-collapse text-sm w-full">
                 <thead>
                   <tr>
@@ -1134,13 +1133,12 @@ export default function App() {
                     </tr>
                   ))}
                 </tbody>
-              </table>
+               </table>
 
                 <p className="text-xs text-muted-foreground mt-4" style={{ fontFamily: "var(--font-sans)" }}>
                   Mildiou de la vigne • {location.name}, {location.region} •{" "}
                   Classe 0 = Nul • 1 = Faible • 2 = Moyen • 3 = Fort • 4 = Très fort
                 </p>
-                </div>
                 <div className="mt-4 pt-4 border-t border-border/50">
                   <StackedBarChart data={chartData} activeModels={activeModels} />
                 </div>

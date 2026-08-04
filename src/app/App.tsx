@@ -388,6 +388,209 @@ function ConsensusChart({
   );
 }
 
+// ─── Stacked Bar Chart ──────────────────────────────────────────────────
+
+function StackedBarChart({
+  data,
+  activeModels,
+}: {
+  data: ChartRow[];
+  activeModels: Set<string>;
+}) {
+  const [hovered, setHovered] = useState<number | null>(null);
+
+  const PLOT_H = 200;
+  const L = 92;
+  const R = 24;
+  const T = 24;
+  const B = 52;
+
+  const n = data.length;
+  const activeList = MODELS.filter(m => activeModels.has(m.id));
+  const maxStack = activeList.length * 4;
+
+  const GROUP_W = Math.max(20, Math.floor(820 / n));
+  const BAR_W = GROUP_W * 0.72;
+  const BAR_OFF = GROUP_W * 0.14;
+  const SVG_W = L + R + n * GROUP_W;
+  const SVG_H = PLOT_H + T + B;
+
+  const yOf = (v: number) => PLOT_H - (v / maxStack) * PLOT_H;
+
+  const labelEvery = Math.max(1, Math.ceil(n / 10));
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
+        <span className="font-medium text-foreground/70">Risque empilé par modèle :</span>
+        {activeList.map(m => (
+          <span key={m.id} className="flex items-center gap-1.5">
+            <span
+              className="w-5 h-4 rounded-sm inline-block border border-border/30"
+              style={{ backgroundColor: m.color }}
+            />
+            <span style={{ fontFamily: "var(--font-mono)" }}>{m.name}</span>
+          </span>
+        ))}
+      </div>
+
+      <div className="overflow-x-auto w-full rounded-lg border border-border">
+        <svg width={SVG_W} height={SVG_H} style={{ display: "block", minWidth: "100%" }}>
+          <g transform={`translate(${L}, ${T})`}>
+            {[0, 1, 2, 3, 4].map(v => (
+              <g key={v}>
+                <line
+                  x1={0} y1={yOf(v)}
+                  x2={n * GROUP_W} y2={yOf(v)}
+                  stroke={RISK[v].border}
+                  strokeWidth={v === 0 ? 1 : 0.75}
+                  strokeDasharray={v === 0 ? undefined : "3 5"}
+                  strokeOpacity={0.8}
+                />
+                <text
+                  x={-6} y={yOf(v)}
+                  dominantBaseline="middle"
+                  textAnchor="end"
+                  fontSize={9.5}
+                  fill={RISK[v].text}
+                  fontFamily="JetBrains Mono, monospace"
+                  fontWeight="500"
+                >
+                  {v} {RISK[v].label}
+                </text>
+              </g>
+            ))}
+
+            {data.map((d, i) => {
+              const x = i * GROUP_W + BAR_OFF;
+              const isHov = hovered === i;
+
+              return (
+                <g
+                  key={i}
+                  onMouseEnter={() => setHovered(i)}
+                  onMouseLeave={() => setHovered(null)}
+                  style={{ cursor: "default" }}
+                >
+                  {isHov && (
+                    <rect
+                      x={i * GROUP_W} y={0}
+                      width={GROUP_W} height={PLOT_H}
+                      fill="#2d6a4f" fillOpacity={0.05}
+                    />
+                  )}
+
+                  {d.isToday && (
+                    <line
+                      x1={x + BAR_W / 2} y1={0}
+                      x2={x + BAR_W / 2} y2={PLOT_H}
+                      stroke="#2d6a4f" strokeDasharray="4 3"
+                      strokeWidth={1.5} strokeOpacity={0.6}
+                    />
+                  )}
+
+                  {(() => {
+                    let cumulative = 0;
+                    return activeList.map(m => {
+                      const v = (d as Record<string, unknown>)[m.id] as number | undefined;
+                      const level = v ?? 0;
+                      const segH = (level / maxStack) * PLOT_H;
+                      const y = yOf(cumulative + level);
+                      cumulative += level;
+                      return (
+                        <rect
+                          key={m.id}
+                          x={x}
+                          y={y}
+                          width={BAR_W}
+                          height={Math.max(segH, 0)}
+                          fill={m.color}
+                          fillOpacity={0.75}
+                          rx={1}
+                        />
+                      );
+                    });
+                  })()}
+
+                  {i % labelEvery === 0 && (
+                    <text
+                      x={x + BAR_W / 2} y={PLOT_H + 14}
+                      textAnchor="middle" fontSize={9}
+                      fill={d.isToday ? "#2d6a4f" : "#6b7a69"}
+                      fontFamily="JetBrains Mono, monospace"
+                      fontWeight={d.isToday ? "bold" : "normal"}
+                    >
+                      {d.date}
+                    </text>
+                  )}
+
+                  {d.isToday && (
+                    <text
+                      x={x + BAR_W / 2} y={PLOT_H + 26}
+                      textAnchor="middle" fontSize={8.5}
+                      fill="#2d6a4f" fontFamily="JetBrains Mono, monospace"
+                      fontWeight="bold"
+                    >
+                      auj.
+                    </text>
+                  )}
+                </g>
+              );
+            })}
+
+            {hovered !== null && (() => {
+              const d = data[hovered];
+              if (!d) return null;
+              const tipX = Math.min(L + hovered * GROUP_W + GROUP_W / 2, SVG_W - 140);
+              const tipY = T + 20;
+              const lines = activeList.map(m => {
+                const v = (d as Record<string, unknown>)[m.id] as number | undefined;
+                return { name: m.name, v };
+              });
+              return (
+                <g>
+                  <rect
+                    x={tipX + 8} y={tipY}
+                    width={130} height={16 + lines.length * 16 + 8}
+                    fill="white" stroke="#e5e7eb" strokeWidth={1} rx={5}
+                    filter="drop-shadow(0 2px 6px rgba(0,0,0,0.12))"
+                  />
+                  <text
+                    x={tipX + 16} y={tipY + 14}
+                    fontSize={9.5} fill="#6b7280"
+                    fontFamily="JetBrains Mono, monospace" fontWeight="bold"
+                  >
+                    {d.date}{d.isToday ? " (auj.)" : d.isForecast ? " (prévu)" : " (hist.)"}
+                  </text>
+                  {lines.map((l, li) => {
+                    const baseY = tipY + 30 + li * 16;
+                    const r = RISK[l.v ?? 0];
+                    return (
+                      <text
+                        key={li}
+                        x={tipX + 16} y={baseY}
+                        fontSize={9.5}
+                        fill={r?.text ?? "#374151"}
+                        fontFamily="JetBrains Mono, monospace"
+                      >
+                        {`${l.name} : ${l.v ?? "—"} – ${r?.label ?? "N/A"}`}
+                      </text>
+                    );
+                  })}
+                </g>
+              );
+            })()}
+          </g>
+        </svg>
+      </div>
+
+      <p className="text-xs text-muted-foreground" style={{ fontFamily: "var(--font-mono)" }}>
+        Barres empilées par modèle · Plus haut = risque cumulé plus élevé
+      </p>
+    </div>
+  );
+}
+
 // ─── Main App ─────────────────────────────────────────────────────────────────
 
 export default function App() {
@@ -950,9 +1153,12 @@ export default function App() {
                  Mildiou de la vigne • {location.name}, {location.region} •{" "}
                  Classe 0 = Nul • 1 = Faible • 2 = Moyen • 3 = Fort • 4 = Très fort
                </p>
-             </div>
-            </>
-          )}
+              </div>
+              <div className="mt-6">
+                <StackedBarChart data={chartData} activeModels={activeModels} />
+              </div>
+             </>
+           )}
 
           {tab === "consensus" && (
             <ConsensusChart

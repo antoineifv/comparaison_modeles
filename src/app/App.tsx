@@ -403,7 +403,7 @@ function StackedBarChart({
   const [hovered, setHovered] = useState<number | null>(null);
 
   const PLOT_H = 260;
-  const L = 92;
+  const L = 80;
   const R = 24;
   const T = 24;
   const B = 52;
@@ -411,7 +411,7 @@ function StackedBarChart({
   const n = data.length;
   const activeList = MODELS.filter(m => activeModels.has(m.id));
 
-  const GROUP_W = Math.max(30, Math.floor(1500 / n));
+  const GROUP_W = 52;
   const BAR_W = GROUP_W * 0.72;
   const BAR_OFF = GROUP_W * 0.14;
   const SVG_W = L + R + n * GROUP_W;
@@ -421,28 +421,16 @@ function StackedBarChart({
 
   const labelEvery = Math.max(1, Math.ceil(n / 10));
 
+  const legendItems = [1, 2, 3, 4].map(count => {
+    const eff = Math.round((1 - Math.pow(1 - STACK_BAR_OPACITY, count)) * 100);
+    const opacity = 1 - Math.pow(1 - STACK_BAR_OPACITY, count);
+    return { count, eff, opacity };
+  });
+
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
-        <span className="font-medium text-foreground/70">Risque empilé :</span>
-        {[1, 2, 3, 4].map(count => {
-          const eff = Math.round((1 - Math.pow(1 - STACK_BAR_OPACITY, count)) * 100);
-          return (
-            <span key={count} className="flex items-center gap-1.5">
-              <span
-                className="w-5 h-4 rounded-sm inline-block border border-border/30"
-                style={{ backgroundColor: STACK_BAR_COLOR, opacity: 1 - Math.pow(1 - STACK_BAR_OPACITY, count) }}
-              />
-              <span style={{ fontFamily: "var(--font-sans)" }}>
-                {count} modèle{count > 1 ? "s" : ""} ({eff}%)
-              </span>
-            </span>
-          );
-        })}
-      </div>
-
-      <div className="overflow-x-auto w-full">
-        <svg width="100%" height={SVG_H} style={{ display: "block" }}>
+      <div className="w-full">
+        <svg width={SVG_W} height={SVG_H} style={{ display: "block" }}>
            <g transform={`translate(${L}, ${T})`}>
              {[0, 1, 2, 3].map(v => (
                <rect
@@ -596,6 +584,21 @@ function StackedBarChart({
             })()}
           </g>
         </svg>
+      </div>
+
+      <div className="flex flex-col gap-1 text-xs text-muted-foreground">
+        <span className="font-medium text-foreground/70">Risque empilé :</span>
+        {legendItems.map(({ count, eff, opacity }) => (
+          <span key={count} className="flex items-center gap-1.5">
+            <span
+              className="w-5 h-4 rounded-sm inline-block border border-border/30"
+              style={{ backgroundColor: STACK_BAR_COLOR, opacity }}
+            />
+            <span style={{ fontFamily: "var(--font-mono)" }}>
+              {count} modèle{count > 1 ? "s" : ""} ({eff}%)
+            </span>
+          </span>
+        ))}
       </div>
 
       <p className="text-xs text-muted-foreground" style={{ fontFamily: "var(--font-sans)" }}>

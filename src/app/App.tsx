@@ -340,18 +340,18 @@ function ConsensusChart({
                const v = (d as Record<string, unknown>)[m.id] as number | undefined;
                return { name: m.name, v };
              });
-             const boxW = 130;
-             const boxH = 16 + lines.length * 16 + (d.observed !== undefined ? 16 : 0) + 8;
-             const el = scrollRef.current;
-             const visibleLeft = el?.scrollLeft ?? 0;
-             const visibleRight = el ? el.scrollLeft + el.clientWidth : SVG_W;
-             let boxLeft = mousePos.x + 8;
-             if (boxLeft + boxW > visibleRight - 8) {
-               boxLeft = mousePos.x - 8 - boxW;
-             }
-             boxLeft = Math.max(visibleLeft + 8, Math.min(boxLeft, visibleRight - boxW - 8));
-             const tipX = boxLeft;
-             const tipY = Math.max(T, Math.min(mousePos.y + 4, T + PLOT_H - boxH));
+const boxW = 130;
+              const boxH = 20 + lines.length * 16 + (d.observed !== undefined ? 16 : 0) + 10;
+              const el = scrollRef.current;
+              const visibleLeft = el?.scrollLeft ?? 0;
+              const visibleRight = el ? el.scrollLeft + el.clientWidth : SVG_W;
+              let boxLeft = mousePos.x + 2;
+              if (boxLeft + boxW > visibleRight - 8) {
+                boxLeft = mousePos.x - 8 - boxW;
+              }
+              boxLeft = Math.max(visibleLeft + 8, Math.min(boxLeft, visibleRight - boxW - 8));
+              const tipX = boxLeft;
+              const tipY = Math.max(T, Math.min(mousePos.y + 4, T + PLOT_H - boxH));
              return (
                <g>
                  <rect

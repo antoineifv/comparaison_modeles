@@ -436,25 +436,25 @@ function StackedBarChart({
               <span style={{ fontFamily: "var(--font-mono)" }}>
                 {count} modèle{count > 1 ? "s" : ""} ({eff}%)
               </span>
-            </span>
+        </span>
           );
         })}
-      </div>
+       </div>
 
-      <div className="overflow-x-auto w-full rounded-lg border border-border">
-        <svg width={SVG_W} height={SVG_H} style={{ display: "block", minWidth: "100%" }}>
-          <g transform={`translate(${L}, ${T})`}>
-            {[0, 1, 2, 3].map(v => (
-              <rect
-                key={v}
-                x={0}
-                y={yOf(v + 1)}
-                width={n * GROUP_W}
-                height={yOf(v) - yOf(v + 1)}
-                fill={RISK[v + 1].bg}
-                fillOpacity={0.35}
-              />
-            ))}
+       <div className="overflow-x-auto w-full">
+         <svg width={SVG_W} height={SVG_H} style={{ display: "block", minWidth: "100%" }}>
+           <g transform={`translate(${L}, ${T})`}>
+             {[0, 1, 2, 3].map(v => (
+               <rect
+                 key={v}
+                 x={0}
+                 y={yOf(v + 1)}
+                 width={n * GROUP_W}
+                 height={yOf(v) - yOf(v + 1)}
+                 fill={RISK[v + 1].bg}
+                 fillOpacity={0.35}
+               />
+             ))}
 
             {[0, 1, 2, 3, 4].map(v => (
               <g key={v}>
@@ -606,7 +606,7 @@ function StackedBarChart({
   );
 }
 
-// ─── Main App ─────────────────────────────────────────────────────────────────
+// ─── Main App ─────────────────────────────────────────────────────────
 
 export default function App() {
   const [activeModels, setActiveModels] = useState<Set<string>>(new Set(MODELS.map(m => m.id)));
@@ -700,8 +700,6 @@ export default function App() {
     const tomorrowPluie = nextDay?.pluie?.[hypothesis] as number | undefined;
     return { today: todayPluie, tomorrow: tomorrowPluie };
   }, [communeData, todaySerial, tomorrowSerial, hypothesis]);
-
-  const [tab, setTab] = useState<"tableau" | "consensus">("tableau");
 
   const chartData = useMemo((): ChartRow[] => {
     return visibleSerials.map((serial, i) => {
@@ -1027,33 +1025,7 @@ export default function App() {
         {/* Main content */}
         <main className="flex-1 flex flex-col p-5 gap-4 min-w-0 bg-background overflow-auto">
 
-          {/* Tabs */}
-          <div className="flex items-center border-b border-border gap-0 -mb-1">
-            <button
-              onClick={() => setTab("tableau")}
-              className={`px-5 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${
-                tab === "tableau"
-                  ? "border-primary text-primary"
-                  : "border-transparent text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Tableau
-            </button>
-            <button
-              onClick={() => setTab("consensus")}
-              className={`px-5 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${
-                tab === "consensus"
-                  ? "border-primary text-primary"
-                  : "border-transparent text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Accord des modèles
-            </button>
-          </div>
-
-          {tab === "tableau" && (
-            <>
-              <div className="flex items-center border-b border-border gap-0 -mb-1 pb-2">
+          <div className="flex items-center border-b border-border gap-0 -mb-1 pb-2">
                 <span className="text-xs text-muted-foreground" style={{ fontFamily: "var(--font-sans)" }}>
                   {location.name} • Mildiou de la vigne • {HYPOTHESES.find(h => h.id === hypothesis)?.label}
                 </span>
@@ -1164,25 +1136,15 @@ export default function App() {
                 </tbody>
               </table>
 
-               <p className="text-xs text-muted-foreground mt-4" style={{ fontFamily: "var(--font-sans)" }}>
-                 Mildiou de la vigne • {location.name}, {location.region} •{" "}
-                 Classe 0 = Nul • 1 = Faible • 2 = Moyen • 3 = Fort • 4 = Très fort
-               </p>
-              </div>
-              <div className="mt-6">
-                <StackedBarChart data={chartData} activeModels={activeModels} />
-              </div>
-             </>
-           )}
-
-          {tab === "consensus" && (
-            <ConsensusChart
-              data={chartData}
-              activeModels={activeModels}
-              showObserved={false}
-            />
-          )}
-        </main>
+                <p className="text-xs text-muted-foreground mt-4" style={{ fontFamily: "var(--font-sans)" }}>
+                  Mildiou de la vigne • {location.name}, {location.region} •{" "}
+                  Classe 0 = Nul • 1 = Faible • 2 = Moyen • 3 = Fort • 4 = Très fort
+                </p>
+               </div>
+               <div className="mt-6">
+                 <StackedBarChart data={chartData} activeModels={activeModels} />
+               </div>
+          </main>
       </div>
     </div>
   );

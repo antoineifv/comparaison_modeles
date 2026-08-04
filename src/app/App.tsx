@@ -472,7 +472,7 @@ function StackedBarChart({
                   textAnchor="end"
                   fontSize={9.5}
                   fill={RISK[v].text}
-                  fontFamily="var(--font-sans)"
+                  fontFamily="var(--font-mono)"
                   fontWeight="500"
                 >
                   {v} {RISK[v].label}
@@ -531,7 +531,7 @@ function StackedBarChart({
                       x={x + BAR_W / 2} y={PLOT_H + 14}
                       textAnchor="middle" fontSize={9}
                       fill={d.isToday ? "#2d6a4f" : "#6b7a69"}
-                      fontFamily="var(--font-sans)"
+                      fontFamily="var(--font-mono)"
                       fontWeight={d.isToday ? "bold" : "normal"}
                     >
                       {d.date}
@@ -542,7 +542,7 @@ function StackedBarChart({
                     <text
                       x={x + BAR_W / 2} y={PLOT_H + 26}
                       textAnchor="middle" fontSize={8.5}
-                      fill="#2d6a4f" fontFamily="var(--font-sans)"
+                      fill="#2d6a4f" fontFamily="var(--font-mono)"
                       fontWeight="bold"
                     >
                       auj.
@@ -572,7 +572,7 @@ function StackedBarChart({
                   <text
                     x={tipX + 16} y={tipY + 14}
                     fontSize={9.5} fill="#6b7280"
-                    fontFamily="var(--font-sans)" fontWeight="bold"
+                    fontFamily="var(--font-mono)" fontWeight="bold"
                   >
                     {d.date}{d.isToday ? " (auj.)" : d.isForecast ? " (prévu)" : " (hist.)"}
                   </text>
@@ -585,7 +585,7 @@ function StackedBarChart({
                         x={tipX + 16} y={baseY}
                         fontSize={9.5}
                         fill={r?.text ?? "#374151"}
-                        fontFamily="var(--font-sans)"
+                        fontFamily="var(--font-mono)"
                       >
                         {`${l.name} : ${l.v ?? "—"} – ${r?.label ?? "N/A"}`}
                       </text>
@@ -1141,7 +1141,7 @@ export default function App() {
                   Classe 0 = Nul • 1 = Faible • 2 = Moyen • 3 = Fort • 4 = Très fort
                 </p>
                 </div>
-                <div className="mt-8 pt-6 border-t border-border/50">
+                <div className="mt-4 pt-4 border-t border-border/50">
                   <StackedBarChart data={chartData} activeModels={activeModels} />
                 </div>
           </main>

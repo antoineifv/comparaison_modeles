@@ -433,7 +433,7 @@ function StackedBarChart({
                 className="w-5 h-4 rounded-sm inline-block border border-border/30"
                 style={{ backgroundColor: STACK_BAR_COLOR, opacity: 1 - Math.pow(1 - STACK_BAR_OPACITY, count) }}
               />
-              <span style={{ fontFamily: "var(--font-mono)" }}>
+              <span style={{ fontFamily: "var(--font-sans)" }}>
                 {count} modèle{count > 1 ? "s" : ""} ({eff}%)
               </span>
         </span>
@@ -472,7 +472,7 @@ function StackedBarChart({
                   textAnchor="end"
                   fontSize={9.5}
                   fill={RISK[v].text}
-                  fontFamily="var(--font-mono)"
+                  fontFamily="var(--font-sans)"
                   fontWeight="500"
                 >
                   {v} {RISK[v].label}
@@ -531,7 +531,7 @@ function StackedBarChart({
                       x={x + BAR_W / 2} y={PLOT_H + 14}
                       textAnchor="middle" fontSize={9}
                       fill={d.isToday ? "#2d6a4f" : "#6b7a69"}
-                      fontFamily="var(--font-mono)"
+                      fontFamily="var(--font-sans)"
                       fontWeight={d.isToday ? "bold" : "normal"}
                     >
                       {d.date}
@@ -542,7 +542,7 @@ function StackedBarChart({
                     <text
                       x={x + BAR_W / 2} y={PLOT_H + 26}
                       textAnchor="middle" fontSize={8.5}
-                      fill="#2d6a4f" fontFamily="var(--font-mono)"
+                      fill="#2d6a4f" fontFamily="var(--font-sans)"
                       fontWeight="bold"
                     >
                       auj.
@@ -572,7 +572,7 @@ function StackedBarChart({
                   <text
                     x={tipX + 16} y={tipY + 14}
                     fontSize={9.5} fill="#6b7280"
-                    fontFamily="var(--font-mono)" fontWeight="bold"
+                    fontFamily="var(--font-sans)" fontWeight="bold"
                   >
                     {d.date}{d.isToday ? " (auj.)" : d.isForecast ? " (prévu)" : " (hist.)"}
                   </text>
@@ -585,7 +585,7 @@ function StackedBarChart({
                         x={tipX + 16} y={baseY}
                         fontSize={9.5}
                         fill={r?.text ?? "#374151"}
-                        fontFamily="var(--font-mono)"
+                        fontFamily="var(--font-sans)"
                       >
                         {`${l.name} : ${l.v ?? "—"} – ${r?.label ?? "N/A"}`}
                       </text>
@@ -598,7 +598,7 @@ function StackedBarChart({
         </svg>
       </div>
 
-      <p className="text-xs text-muted-foreground" style={{ fontFamily: "var(--font-mono)" }}>
+      <p className="text-xs text-muted-foreground" style={{ fontFamily: "var(--font-sans)" }}>
         Barres empilées (opacité {Math.round(STACK_BAR_OPACITY * 100)}% / modèle) ·
         Plus sombre = plus de modèles prédisent ce niveau de risque
       </p>

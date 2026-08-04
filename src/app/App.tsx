@@ -219,7 +219,7 @@ function ConsensusChart({
                   textAnchor="end"
                   fontSize={9.5}
                   fill={RISK[v].text}
-                  fontFamily="JetBrains Mono, monospace"
+                  fontFamily="var(--font-sans)"
                   fontWeight="500"
                 >
                   {v} {RISK[v].label}
@@ -295,7 +295,7 @@ function ConsensusChart({
                       x={x + BAR_W / 2} y={PLOT_H + 14}
                       textAnchor="middle" fontSize={9}
                       fill={d.isToday ? "#2d6a4f" : "#6b7a69"}
-                      fontFamily="JetBrains Mono, monospace"
+                      fontFamily="var(--font-sans)"
                       fontWeight={d.isToday ? "bold" : "normal"}
                     >
                       {d.date}
@@ -306,7 +306,7 @@ function ConsensusChart({
                     <text
                       x={x + BAR_W / 2} y={PLOT_H + 26}
                       textAnchor="middle" fontSize={8.5}
-                      fill="#2d6a4f" fontFamily="JetBrains Mono, monospace"
+                      fill="#2d6a4f" fontFamily="var(--font-sans)"
                       fontWeight="bold"
                     >
                       auj.
@@ -319,7 +319,7 @@ function ConsensusChart({
             <text
               x={n * GROUP_W / 2} y={10}
               textAnchor="middle" fontSize={9}
-              fill="#9ca3af" fontFamily="JetBrains Mono, monospace"
+              fill="#9ca3af" fontFamily="var(--font-sans)"
             >
               ← historique  |  prévision →
             </text>
@@ -345,7 +345,7 @@ function ConsensusChart({
                 <text
                   x={tipX + 16} y={tipY + 14}
                   fontSize={9.5} fill="#6b7280"
-                  fontFamily="JetBrains Mono, monospace" fontWeight="bold"
+                  fontFamily="var(--font-sans)" fontWeight="bold"
                 >
                   {d.date}{d.isToday ? " (auj.)" : d.isForecast ? " (prévu)" : " (hist.)"}
                 </text>
@@ -353,7 +353,7 @@ function ConsensusChart({
                   <text
                     x={tipX + 16} y={tipY + 30}
                     fontSize={9.5} fill="#1c2b1c"
-                    fontFamily="JetBrains Mono, monospace"
+                    fontFamily="var(--font-sans)"
                   >
                     {`Observé : ${d.observed} – ${RISK[d.observed]?.label}`}
                   </text>
@@ -367,7 +367,7 @@ function ConsensusChart({
                       x={tipX + 16} y={baseY}
                       fontSize={9.5}
                       fill={r?.text ?? "#374151"}
-                      fontFamily="JetBrains Mono, monospace"
+                      fontFamily="var(--font-sans)"
                     >
                       {`${l.name} : ${l.v ?? "—"} – ${r?.label ?? "N/A"}`}
                     </text>
@@ -472,7 +472,7 @@ function StackedBarChart({
                   textAnchor="end"
                   fontSize={9.5}
                   fill={RISK[v].text}
-                  fontFamily="JetBrains Mono, monospace"
+                  fontFamily="var(--font-sans)"
                   fontWeight="500"
                 >
                   {v} {RISK[v].label}
@@ -531,7 +531,7 @@ function StackedBarChart({
                       x={x + BAR_W / 2} y={PLOT_H + 14}
                       textAnchor="middle" fontSize={9}
                       fill={d.isToday ? "#2d6a4f" : "#6b7a69"}
-                      fontFamily="JetBrains Mono, monospace"
+                      fontFamily="var(--font-sans)"
                       fontWeight={d.isToday ? "bold" : "normal"}
                     >
                       {d.date}
@@ -542,7 +542,7 @@ function StackedBarChart({
                     <text
                       x={x + BAR_W / 2} y={PLOT_H + 26}
                       textAnchor="middle" fontSize={8.5}
-                      fill="#2d6a4f" fontFamily="JetBrains Mono, monospace"
+                      fill="#2d6a4f" fontFamily="var(--font-sans)"
                       fontWeight="bold"
                     >
                       auj.
@@ -572,7 +572,7 @@ function StackedBarChart({
                   <text
                     x={tipX + 16} y={tipY + 14}
                     fontSize={9.5} fill="#6b7280"
-                    fontFamily="JetBrains Mono, monospace" fontWeight="bold"
+                    fontFamily="var(--font-sans)" fontWeight="bold"
                   >
                     {d.date}{d.isToday ? " (auj.)" : d.isForecast ? " (prévu)" : " (hist.)"}
                   </text>
@@ -585,7 +585,7 @@ function StackedBarChart({
                         x={tipX + 16} y={baseY}
                         fontSize={9.5}
                         fill={r?.text ?? "#374151"}
-                        fontFamily="JetBrains Mono, monospace"
+                        fontFamily="var(--font-sans)"
                       >
                         {`${l.name} : ${l.v ?? "—"} – ${r?.label ?? "N/A"}`}
                       </text>
@@ -1140,10 +1140,10 @@ export default function App() {
                   Mildiou de la vigne • {location.name}, {location.region} •{" "}
                   Classe 0 = Nul • 1 = Faible • 2 = Moyen • 3 = Fort • 4 = Très fort
                 </p>
-               </div>
-               <div className="mt-6">
-                 <StackedBarChart data={chartData} activeModels={activeModels} />
-               </div>
+                </div>
+                <div className="mt-8 pt-6 border-t border-border/50">
+                  <StackedBarChart data={chartData} activeModels={activeModels} />
+                </div>
           </main>
       </div>
     </div>

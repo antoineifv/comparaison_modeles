@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { MapPin, ChevronDown, Leaf, CalendarDays } from "lucide-react";
@@ -401,6 +401,7 @@ function StackedBarChart({
   activeModels: Set<string>;
 }) {
   const [hovered, setHovered] = useState<number | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const PLOT_H = 260;
   const L = 80;
@@ -427,9 +428,22 @@ function StackedBarChart({
     return { count, eff, opacity };
   });
 
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el || !data.length) return;
+    const todayIdx = data.findIndex(d => d.isToday);
+    if (todayIdx < 0) {
+      el.scrollLeft = el.scrollWidth - el.clientWidth;
+      return;
+    }
+    const todayPos = L + todayIdx * GROUP_W;
+    const target = todayPos + GROUP_W + 40 - el.clientWidth;
+    el.scrollLeft = Math.max(0, Math.min(target, el.scrollWidth - el.clientWidth));
+  }, [data, L, GROUP_W]);
+
   return (
     <div className="flex flex-col gap-3">
-      <div className="w-full">
+      <div ref={scrollRef} className="overflow-x-auto w-full">
         <svg width={SVG_W} height={SVG_H} style={{ display: "block" }}>
            <g transform={`translate(${L}, ${T})`}>
              {[0, 1, 2, 3].map(v => (
@@ -731,6 +745,24 @@ export default function App() {
     }
   }, [location.name]);
 
+  const tableScrollRef = useRef<HTMLDivElement>(null);
+
+  const STICKY_COL_W = 80;
+  const TABLE_COL_W = 52;
+
+  useEffect(() => {
+    const el = tableScrollRef.current;
+    if (!el || visibleSerials.length === 0) return;
+    const todayIdx = TODAY_INDEX - visibleRange.start;
+    if (todayIdx < 0) {
+      el.scrollLeft = el.scrollWidth - el.clientWidth;
+      return;
+    }
+    const todayPos = STICKY_COL_W + todayIdx * TABLE_COL_W;
+    const target = todayPos + TABLE_COL_W + 40 - el.clientWidth;
+    el.scrollLeft = Math.max(0, Math.min(target, el.scrollWidth - el.clientWidth));
+  }, [visibleSerials, visibleRange, TODAY_INDEX]);
+
   const toggleModel = (id: string) => {
     setActiveModels(prev => {
       const next = new Set(prev);
@@ -1026,7 +1058,7 @@ export default function App() {
         </aside>
 
         {/* Main content */}
-        <main className="flex-1 flex flex-col p-5 gap-4 min-w-0 bg-background overflow-auto">
+        <main className="flex-1 flex flex-col p-5 gap-4 min-w-0 bg-background overflow-y-auto">
 
           <div className="flex items-center border-b border-border gap-0 -mb-1 pb-2">
                 <span className="text-xs text-muted-foreground" style={{ fontFamily: "var(--font-sans)" }}>
@@ -1035,12 +1067,13 @@ export default function App() {
               </div>
 
               {/* ── Heatmap ── */}
-              <table className="border-collapse text-sm w-full">
+              <div ref={tableScrollRef} className="overflow-x-auto w-full">
+              <table className="border-collapse text-sm">
                 <thead>
                   <tr>
                     <th
                       className="text-left py-2 pr-4 text-xs text-muted-foreground font-medium sticky left-0 bg-background z-10 border-b border-r border-border"
-                      style={{ minWidth: "80px" }}
+                      style={{ minWidth: "80px", width: "80px" }}
                     >
                       Modèle
                     </th>
@@ -1052,7 +1085,7 @@ export default function App() {
                         <th
                           key={i}
                           className={`py-2 px-1 text-center border-b border-border/40 ${isToday ? "border-b-2 border-b-primary bg-neutral-100 rounded-t-md" : ""}`}
-                          style={{ minWidth: "52px" }}
+                          style={{ minWidth: "52px", width: "52px" }}
                         >
                           <div
                             className={`text-[10px] leading-tight ${isToday ? "text-primary font-bold" : "text-muted-foreground"}`}
@@ -1137,6 +1170,7 @@ export default function App() {
                   ))}
                 </tbody>
                </table>
+              </div>
 
                 <p className="text-xs text-muted-foreground mt-4" style={{ fontFamily: "var(--font-sans)" }}>
                   Mildiou de la vigne • {location.name}, {location.region} •{" "}

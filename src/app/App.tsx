@@ -114,6 +114,280 @@ function RiskBadge({ level, size = "md" }: { level: number; size?: "sm" | "md" |
   );
 }
 
+// ─── Consensus bar chart ─────────────────────────────────────────────────────
+
+type ChartRow = {
+  date: string;
+  dateShort: string;
+  idx: number;
+  isForecast: boolean;
+  isToday: boolean;
+  observed?: number;
+  rossi?: number;
+  potsys?: number;
+  milvit?: number;
+  milstop?: number;
+};
+
+const BAR_COLOR = "#2d6a4f";
+const BAR_OPACITY = 0.27;
+
+function ConsensusChart({
+  data,
+  activeModels,
+  showObserved,
+}: {
+  data: ChartRow[];
+  activeModels: Set<string>;
+  showObserved: boolean;
+}) {
+  const [hovered, setHovered] = useState<number | null>(null);
+
+  const PLOT_H = 260;
+  const L = 92;
+  const R = 24;
+  const T = 24;
+  const B = 52;
+
+  const n = data.length;
+  const activeList = MODELS.filter(m => activeModels.has(m.id));
+
+  const GROUP_W = Math.max(20, Math.floor(820 / n));
+  const BAR_W = GROUP_W * 0.72;
+  const BAR_OFF = GROUP_W * 0.14;
+  const SVG_W = L + R + n * GROUP_W;
+  const SVG_H = PLOT_H + T + B;
+
+  const yOf = (v: number) => PLOT_H - (v / 4) * PLOT_H;
+
+  const labelEvery = Math.max(1, Math.ceil(n / 10));
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
+        <span className="font-medium text-foreground/70">Concordance des modèles :</span>
+        {[1, 2, 3, 4].map(count => {
+          const eff = Math.round((1 - Math.pow(1 - BAR_OPACITY, count)) * 100);
+          return (
+            <span key={count} className="flex items-center gap-1.5">
+              <span
+                className="w-5 h-4 rounded-sm inline-block border border-border/30"
+                style={{ backgroundColor: BAR_COLOR, opacity: 1 - Math.pow(1 - BAR_OPACITY, count) }}
+              />
+              <span style={{ fontFamily: "var(--font-mono)" }}>
+                {count} modèle{count > 1 ? "s" : ""} ({eff}%)
+              </span>
+            </span>
+          );
+        })}
+        {showObserved && (
+          <span className="flex items-center gap-1.5 ml-2 border-l border-border pl-4">
+            <span className="w-5 h-0 border-t-2 border-foreground/70 inline-block" />
+            <span>Observé</span>
+          </span>
+        )}
+      </div>
+
+      <div className="overflow-x-auto w-full rounded-lg border border-border">
+        <svg width={SVG_W} height={SVG_H} style={{ display: "block", minWidth: "100%" }}>
+          <g transform={`translate(${L}, ${T})`}>
+            {[0, 1, 2, 3].map(v => (
+              <rect
+                key={v}
+                x={0}
+                y={yOf(v + 1)}
+                width={n * GROUP_W}
+                height={yOf(v) - yOf(v + 1)}
+                fill={RISK[v + 1].bg}
+                fillOpacity={0.35}
+              />
+            ))}
+
+            {[0, 1, 2, 3, 4].map(v => (
+              <g key={v}>
+                <line
+                  x1={0} y1={yOf(v)}
+                  x2={n * GROUP_W} y2={yOf(v)}
+                  stroke={RISK[v].border}
+                  strokeWidth={v === 0 ? 1 : 0.75}
+                  strokeDasharray={v === 0 ? undefined : "3 5"}
+                  strokeOpacity={0.8}
+                />
+                <text
+                  x={-6} y={yOf(v)}
+                  dominantBaseline="middle"
+                  textAnchor="end"
+                  fontSize={9.5}
+                  fill={RISK[v].text}
+                  fontFamily="JetBrains Mono, monospace"
+                  fontWeight="500"
+                >
+                  {v} {RISK[v].label}
+                </text>
+              </g>
+            ))}
+
+            {data.map((d, i) => {
+              const x = i * GROUP_W + BAR_OFF;
+              const isHov = hovered === i;
+
+              return (
+                <g
+                  key={i}
+                  onMouseEnter={() => setHovered(i)}
+                  onMouseLeave={() => setHovered(null)}
+                  style={{ cursor: "default" }}
+                >
+                  {isHov && (
+                    <rect
+                      x={i * GROUP_W} y={0}
+                      width={GROUP_W} height={PLOT_H}
+                      fill={BAR_COLOR} fillOpacity={0.05}
+                    />
+                  )}
+
+                  {d.isToday && (
+                    <line
+                      x1={x + BAR_W / 2} y1={0}
+                      x2={x + BAR_W / 2} y2={PLOT_H}
+                      stroke="#2d6a4f" strokeDasharray="4 3"
+                      strokeWidth={1.5} strokeOpacity={0.6}
+                    />
+                  )}
+
+                  {activeList.map(m => {
+                    const v = (d as Record<string, unknown>)[m.id] as number | undefined;
+                    if (!v || v === 0) return null;
+                    const barH = (v / 4) * PLOT_H;
+                    return (
+                      <rect
+                        key={m.id}
+                        x={x}
+                        y={yOf(v)}
+                        width={BAR_W}
+                        height={barH}
+                        fill={BAR_COLOR}
+                        fillOpacity={BAR_OPACITY}
+                        rx={2}
+                      />
+                    );
+                  })}
+
+                  {showObserved && d.observed !== undefined && (
+                    <>
+                      <line
+                        x1={x - 2} x2={x + BAR_W + 2}
+                        y1={d.observed === 0 ? PLOT_H : yOf(d.observed)}
+                        y2={d.observed === 0 ? PLOT_H : yOf(d.observed)}
+                        stroke="#1c2b1c" strokeWidth={2.5} strokeLinecap="round"
+                      />
+                      <rect
+                        x={x + BAR_W / 2 - 3}
+                        y={(d.observed === 0 ? PLOT_H : yOf(d.observed)) - 3}
+                        width={6} height={6} fill="#1c2b1c"
+                        transform={`rotate(45, ${x + BAR_W / 2}, ${d.observed === 0 ? PLOT_H : yOf(d.observed)})`}
+                      />
+                    </>
+                  )}
+
+                  {i % labelEvery === 0 && (
+                    <text
+                      x={x + BAR_W / 2} y={PLOT_H + 14}
+                      textAnchor="middle" fontSize={9}
+                      fill={d.isToday ? "#2d6a4f" : "#6b7a69"}
+                      fontFamily="JetBrains Mono, monospace"
+                      fontWeight={d.isToday ? "bold" : "normal"}
+                    >
+                      {d.date}
+                    </text>
+                  )}
+
+                  {d.isToday && (
+                    <text
+                      x={x + BAR_W / 2} y={PLOT_H + 26}
+                      textAnchor="middle" fontSize={8.5}
+                      fill="#2d6a4f" fontFamily="JetBrains Mono, monospace"
+                      fontWeight="bold"
+                    >
+                      auj.
+                    </text>
+                  )}
+                </g>
+              );
+            })}
+
+            <text
+              x={n * GROUP_W / 2} y={10}
+              textAnchor="middle" fontSize={9}
+              fill="#9ca3af" fontFamily="JetBrains Mono, monospace"
+            >
+              ← historique  |  prévision →
+            </text>
+          </g>
+
+          {hovered !== null && (() => {
+            const d = data[hovered];
+            if (!d) return null;
+            const tipX = Math.min(L + hovered * GROUP_W + GROUP_W / 2, SVG_W - 140);
+            const tipY = T + 20;
+            const lines = activeList.map(m => {
+              const v = (d as Record<string, unknown>)[m.id] as number | undefined;
+              return { name: m.name, v };
+            });
+            return (
+              <g>
+                <rect
+                  x={tipX + 8} y={tipY}
+                  width={130} height={16 + lines.length * 16 + (d.observed !== undefined ? 16 : 0) + 8}
+                  fill="white" stroke="#e5e7eb" strokeWidth={1} rx={5}
+                  filter="drop-shadow(0 2px 6px rgba(0,0,0,0.12))"
+                />
+                <text
+                  x={tipX + 16} y={tipY + 14}
+                  fontSize={9.5} fill="#6b7280"
+                  fontFamily="JetBrains Mono, monospace" fontWeight="bold"
+                >
+                  {d.date}{d.isToday ? " (auj.)" : d.isForecast ? " (prévu)" : " (hist.)"}
+                </text>
+                {showObserved && d.observed !== undefined && (
+                  <text
+                    x={tipX + 16} y={tipY + 30}
+                    fontSize={9.5} fill="#1c2b1c"
+                    fontFamily="JetBrains Mono, monospace"
+                  >
+                    {`Observé : ${d.observed} – ${RISK[d.observed]?.label}`}
+                  </text>
+                )}
+                {lines.map((l, li) => {
+                  const baseY = tipY + 30 + (showObserved && d.observed !== undefined ? 16 : 0) + li * 16;
+                  const r = RISK[l.v ?? 0];
+                  return (
+                    <text
+                      key={li}
+                      x={tipX + 16} y={baseY}
+                      fontSize={9.5}
+                      fill={r?.text ?? "#374151"}
+                      fontFamily="JetBrains Mono, monospace"
+                    >
+                      {`${l.name} : ${l.v ?? "—"} – ${r?.label ?? "N/A"}`}
+                    </text>
+                  );
+                })}
+              </g>
+            );
+          })()}
+        </svg>
+      </div>
+
+      <p className="text-xs text-muted-foreground" style={{ fontFamily: "var(--font-mono)" }}>
+        Barres superposées (opacité {Math.round(BAR_OPACITY * 100)}% / modèle) ·
+        Plus sombre = plus de modèles prédisent ce niveau de risque
+        {showObserved && " · ◆ = valeur observée"}
+      </p>
+    </div>
+  );
+}
+
 // ─── Main App ─────────────────────────────────────────────────────────────────
 
 export default function App() {
@@ -208,6 +482,26 @@ export default function App() {
     const tomorrowPluie = nextDay?.pluie?.[hypothesis] as number | undefined;
     return { today: todayPluie, tomorrow: tomorrowPluie };
   }, [communeData, todaySerial, tomorrowSerial, hypothesis]);
+
+  const [tab, setTab] = useState<"tableau" | "consensus">("tableau");
+
+  const chartData = useMemo((): ChartRow[] => {
+    return visibleSerials.map((serial, i) => {
+      const globalIdx = visibleRange.start + i;
+      const day = communeData[serial];
+      return {
+        date: format(visibleDates[i], "d MMM", { locale: fr }),
+        dateShort: format(visibleDates[i], "dd/MM"),
+        idx: globalIdx,
+        isForecast: globalIdx > TODAY_INDEX,
+        isToday: globalIdx === TODAY_INDEX,
+        rossi: day?.rossi?.[hypothesis] as number | undefined,
+        potsys: day?.potsys?.[hypothesis] as number | undefined,
+        milvit: day?.milvit?.[hypothesis] as number | undefined,
+        milstop: day?.milstop?.[hypothesis] as number | undefined,
+      };
+    });
+  }, [visibleSerials, visibleDates, visibleRange, communeData, hypothesis, TODAY_INDEX]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -515,14 +809,40 @@ export default function App() {
         {/* Main content */}
         <main className="flex-1 flex flex-col p-5 gap-4 min-w-0 bg-background overflow-auto">
 
-          <div className="flex items-center border-b border-border gap-0 -mb-1 pb-2">
-            <span className="text-xs text-muted-foreground" style={{ fontFamily: "var(--font-sans)" }}>
-              {location.name} • Mildiou de la vigne • {HYPOTHESES.find(h => h.id === hypothesis)?.label}
-            </span>
+          {/* Tabs */}
+          <div className="flex items-center border-b border-border gap-0 -mb-1">
+            <button
+              onClick={() => setTab("tableau")}
+              className={`px-5 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${
+                tab === "tableau"
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Tableau
+            </button>
+            <button
+              onClick={() => setTab("consensus")}
+              className={`px-5 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${
+                tab === "consensus"
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Accord des modèles
+            </button>
           </div>
 
-          {/* ── Tableau (heatmap) ── */}
-          <div className="overflow-x-auto">
+          {tab === "tableau" && (
+            <>
+              <div className="flex items-center border-b border-border gap-0 -mb-1 pb-2">
+                <span className="text-xs text-muted-foreground" style={{ fontFamily: "var(--font-sans)" }}>
+                  {location.name} • Mildiou de la vigne • {HYPOTHESES.find(h => h.id === hypothesis)?.label}
+                </span>
+              </div>
+
+              {/* ── Heatmap ── */}
+              <div className="overflow-x-auto">
               <table className="border-collapse text-sm w-full min-w-max">
                 <thead>
                   <tr>
@@ -626,11 +946,21 @@ export default function App() {
                 </tbody>
               </table>
 
-              <p className="text-xs text-muted-foreground mt-4" style={{ fontFamily: "var(--font-sans)" }}>
-                Mildiou de la vigne • {location.name}, {location.region} •{" "}
-                Classe 0 = Nul • 1 = Faible • 2 = Moyen • 3 = Fort • 4 = Très fort
-              </p>
-            </div>
+               <p className="text-xs text-muted-foreground mt-4" style={{ fontFamily: "var(--font-sans)" }}>
+                 Mildiou de la vigne • {location.name}, {location.region} •{" "}
+                 Classe 0 = Nul • 1 = Faible • 2 = Moyen • 3 = Fort • 4 = Très fort
+               </p>
+             </div>
+            </>
+          )}
+
+          {tab === "consensus" && (
+            <ConsensusChart
+              data={chartData}
+              activeModels={activeModels}
+              showObserved={false}
+            />
+          )}
         </main>
       </div>
     </div>

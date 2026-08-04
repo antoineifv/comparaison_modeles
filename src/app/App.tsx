@@ -388,7 +388,10 @@ function ConsensusChart({
   );
 }
 
-// ─── Stacked Bar Chart ──────────────────────────────────────────────────
+// ─── Stacked Bar Chart ─────────────────────────────────────────────────────
+
+const STACK_BAR_COLOR = "#2d6a4f";
+const STACK_BAR_OPACITY = 0.27;
 
 function StackedBarChart({
   data,
@@ -399,7 +402,7 @@ function StackedBarChart({
 }) {
   const [hovered, setHovered] = useState<number | null>(null);
 
-  const PLOT_H = 200;
+  const PLOT_H = 260;
   const L = 92;
   const R = 24;
   const T = 24;
@@ -407,7 +410,6 @@ function StackedBarChart({
 
   const n = data.length;
   const activeList = MODELS.filter(m => activeModels.has(m.id));
-  const maxStack = activeList.length * 4;
 
   const GROUP_W = Math.max(20, Math.floor(820 / n));
   const BAR_W = GROUP_W * 0.72;
@@ -415,28 +417,45 @@ function StackedBarChart({
   const SVG_W = L + R + n * GROUP_W;
   const SVG_H = PLOT_H + T + B;
 
-  const yOf = (v: number) => PLOT_H - (v / maxStack) * PLOT_H;
+  const yOf = (v: number) => PLOT_H - (v / 4) * PLOT_H;
 
   const labelEvery = Math.max(1, Math.ceil(n / 10));
 
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
-        <span className="font-medium text-foreground/70">Risque empilé par modèle :</span>
-        {activeList.map(m => (
-          <span key={m.id} className="flex items-center gap-1.5">
-            <span
-              className="w-5 h-4 rounded-sm inline-block border border-border/30"
-              style={{ backgroundColor: m.color }}
-            />
-            <span style={{ fontFamily: "var(--font-mono)" }}>{m.name}</span>
-          </span>
-        ))}
+        <span className="font-medium text-foreground/70">Risque empilé :</span>
+        {[1, 2, 3, 4].map(count => {
+          const eff = Math.round((1 - Math.pow(1 - STACK_BAR_OPACITY, count)) * 100);
+          return (
+            <span key={count} className="flex items-center gap-1.5">
+              <span
+                className="w-5 h-4 rounded-sm inline-block border border-border/30"
+                style={{ backgroundColor: STACK_BAR_COLOR, opacity: 1 - Math.pow(1 - STACK_BAR_OPACITY, count) }}
+              />
+              <span style={{ fontFamily: "var(--font-mono)" }}>
+                {count} modèle{count > 1 ? "s" : ""} ({eff}%)
+              </span>
+            </span>
+          );
+        })}
       </div>
 
       <div className="overflow-x-auto w-full rounded-lg border border-border">
         <svg width={SVG_W} height={SVG_H} style={{ display: "block", minWidth: "100%" }}>
           <g transform={`translate(${L}, ${T})`}>
+            {[0, 1, 2, 3].map(v => (
+              <rect
+                key={v}
+                x={0}
+                y={yOf(v + 1)}
+                width={n * GROUP_W}
+                height={yOf(v) - yOf(v + 1)}
+                fill={RISK[v + 1].bg}
+                fillOpacity={0.35}
+              />
+            ))}
+
             {[0, 1, 2, 3, 4].map(v => (
               <g key={v}>
                 <line
@@ -476,7 +495,7 @@ function StackedBarChart({
                     <rect
                       x={i * GROUP_W} y={0}
                       width={GROUP_W} height={PLOT_H}
-                      fill="#2d6a4f" fillOpacity={0.05}
+                      fill={STACK_BAR_COLOR} fillOpacity={0.05}
                     />
                   )}
 
@@ -489,28 +508,23 @@ function StackedBarChart({
                     />
                   )}
 
-                  {(() => {
-                    let cumulative = 0;
-                    return activeList.map(m => {
-                      const v = (d as Record<string, unknown>)[m.id] as number | undefined;
-                      const level = v ?? 0;
-                      const segH = (level / maxStack) * PLOT_H;
-                      const y = yOf(cumulative + level);
-                      cumulative += level;
-                      return (
-                        <rect
-                          key={m.id}
-                          x={x}
-                          y={y}
-                          width={BAR_W}
-                          height={Math.max(segH, 0)}
-                          fill={m.color}
-                          fillOpacity={0.75}
-                          rx={1}
-                        />
-                      );
-                    });
-                  })()}
+                  {activeList.map(m => {
+                    const v = (d as Record<string, unknown>)[m.id] as number | undefined;
+                    if (!v || v === 0) return null;
+                    const barH = (v / 4) * PLOT_H;
+                    return (
+                      <rect
+                        key={m.id}
+                        x={x}
+                        y={yOf(v)}
+                        width={BAR_W}
+                        height={barH}
+                        fill={STACK_BAR_COLOR}
+                        fillOpacity={STACK_BAR_OPACITY}
+                        rx={2}
+                      />
+                    );
+                  })}
 
                   {i % labelEvery === 0 && (
                     <text
@@ -585,7 +599,8 @@ function StackedBarChart({
       </div>
 
       <p className="text-xs text-muted-foreground" style={{ fontFamily: "var(--font-mono)" }}>
-        Barres empilées par modèle · Plus haut = risque cumulé plus élevé
+        Barres empilées (opacité {Math.round(STACK_BAR_OPACITY * 100)}% / modèle) ·
+        Plus sombre = plus de modèles prédisent ce niveau de risque
       </p>
     </div>
   );

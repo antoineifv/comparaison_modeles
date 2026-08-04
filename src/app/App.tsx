@@ -578,7 +578,7 @@ function StackedBarChart({
               });
               const boxW = 130;
               const boxH = 16 + lines.length * 16 + 8;
-              const offset = 4;
+              const offset = 0;
               const el = scrollRef.current;
               const visibleLeft = el?.scrollLeft ?? 0;
               const visibleRight = el ? el.scrollLeft + el.clientWidth : SVG_W;
@@ -592,13 +592,13 @@ function StackedBarChart({
               return (
                 <g>
                   <rect
-                    x={tipX + 8} y={tipY}
+                    x={tipX + 2} y={tipY}
                     width={boxW} height={boxH}
                     fill="white" stroke="#e5e7eb" strokeWidth={1} rx={5}
                     filter="drop-shadow(0 2px 6px rgba(0,0,0,0.12))"
                   />
                   <text
-                    x={tipX + 16} y={tipY + 14}
+                    x={tipX + 10} y={tipY + 14}
                     fontSize={9.5} fill="#6b7280"
                     fontFamily="var(--font-sans)" fontWeight="bold"
                   >
@@ -610,7 +610,7 @@ function StackedBarChart({
                     return (
                       <text
                         key={li}
-                        x={tipX + 16} y={baseY}
+                        x={tipX + 10} y={baseY}
                         fontSize={9.5}
                         fill={r?.text ?? "#374151"}
                         fontFamily="var(--font-sans)"

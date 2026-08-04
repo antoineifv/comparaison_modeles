@@ -411,7 +411,7 @@ function StackedBarChart({
   const n = data.length;
   const activeList = MODELS.filter(m => activeModels.has(m.id));
 
-  const GROUP_W = Math.max(20, Math.floor(820 / n));
+  const GROUP_W = Math.max(30, Math.floor(1500 / n));
   const BAR_W = GROUP_W * 0.72;
   const BAR_OFF = GROUP_W * 0.14;
   const SVG_W = L + R + n * GROUP_W;
@@ -436,13 +436,13 @@ function StackedBarChart({
               <span style={{ fontFamily: "var(--font-sans)" }}>
                 {count} modèle{count > 1 ? "s" : ""} ({eff}%)
               </span>
-        </span>
+            </span>
           );
         })}
-       </div>
+      </div>
 
-        <div className="overflow-x-auto w-full">
-          <svg width="100%" height={SVG_H} style={{ display: "block" }}>
+      <div className="overflow-x-auto w-full">
+        <svg width="100%" height={SVG_H} style={{ display: "block" }}>
            <g transform={`translate(${L}, ${T})`}>
              {[0, 1, 2, 3].map(v => (
                <rect

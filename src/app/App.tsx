@@ -401,6 +401,7 @@ function StackedBarChart({
   activeModels: Set<string>;
 }) {
   const [hovered, setHovered] = useState<number | null>(null);
+  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const PLOT_H = 260;
@@ -444,7 +445,16 @@ function StackedBarChart({
   return (
     <div className="flex flex-col gap-3">
       <div ref={scrollRef} className="overflow-x-auto w-full">
-        <svg width={SVG_W} height={SVG_H} style={{ display: "block" }}>
+        <svg
+          width={SVG_W}
+          height={SVG_H}
+          style={{ display: "block" }}
+          onMouseMove={e => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+          }}
+          onMouseLeave={() => setMousePos(null)}
+        >
            <g transform={`translate(${L}, ${T})`}>
              {[0, 1, 2, 3].map(v => (
                <rect
@@ -493,6 +503,11 @@ function StackedBarChart({
                   onMouseLeave={() => setHovered(null)}
                   style={{ cursor: "default" }}
                 >
+                  <rect
+                    x={i * GROUP_W} y={0}
+                    width={GROUP_W} height={PLOT_H}
+                    fill="transparent"
+                  />
                   {isHov && (
                     <rect
                       x={i * GROUP_W} y={0}
@@ -554,20 +569,31 @@ function StackedBarChart({
               );
             })}
 
-            {hovered !== null && (() => {
+            {hovered !== null && mousePos && (() => {
               const d = data[hovered];
               if (!d) return null;
-              const tipX = Math.min(L + hovered * GROUP_W + GROUP_W / 2, SVG_W - 140);
-              const tipY = T + 20;
               const lines = activeList.map(m => {
                 const v = (d as Record<string, unknown>)[m.id] as number | undefined;
                 return { name: m.name, v };
               });
+              const boxW = 130;
+              const boxH = 16 + lines.length * 16 + 8;
+              const offset = 8;
+              const el = scrollRef.current;
+              const visibleLeft = el?.scrollLeft ?? 0;
+              const visibleRight = el ? el.scrollLeft + el.clientWidth : SVG_W;
+              let boxLeft = mousePos.x + offset;
+              if (boxLeft + boxW > visibleRight - offset) {
+                boxLeft = mousePos.x - offset - boxW;
+              }
+              boxLeft = Math.max(visibleLeft + offset, Math.min(boxLeft, visibleRight - boxW - offset));
+              const tipX = boxLeft - offset;
+              const tipY = Math.max(T, Math.min(mousePos.y + 4, T + PLOT_H - boxH));
               return (
                 <g>
                   <rect
                     x={tipX + 8} y={tipY}
-                    width={130} height={16 + lines.length * 16 + 8}
+                    width={boxW} height={boxH}
                     fill="white" stroke="#e5e7eb" strokeWidth={1} rx={5}
                     filter="drop-shadow(0 2px 6px rgba(0,0,0,0.12))"
                   />

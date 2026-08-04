@@ -442,7 +442,7 @@ function StackedBarChart({
        </div>
 
         <div className="overflow-x-auto w-full">
-          <svg width="100%" viewBox={`0 0 ${SVG_W} ${SVG_H}`} style={{ display: "block" }}>
+          <svg width="100%" height={SVG_H} style={{ display: "block" }}>
            <g transform={`translate(${L}, ${T})`}>
              {[0, 1, 2, 3].map(v => (
                <rect

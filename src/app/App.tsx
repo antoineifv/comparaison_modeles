@@ -340,18 +340,20 @@ function ConsensusChart({
                const v = (d as Record<string, unknown>)[m.id] as number | undefined;
                return { name: m.name, v };
              });
-const boxW = 130;
+              const boxW = 130;
               const boxH = 20 + lines.length * 16 + (d.observed !== undefined ? 16 : 0) + 10;
               const el = scrollRef.current;
               const visibleLeft = el?.scrollLeft ?? 0;
               const visibleRight = el ? el.scrollLeft + el.clientWidth : SVG_W;
-              let boxLeft = mousePos.x + 2;
-              if (boxLeft + boxW > visibleRight - 8) {
-                boxLeft = mousePos.x - 8 - boxW;
+              const mx = mousePos.x - L;
+              const my = mousePos.y - T;
+              let boxLeft = mx + 2;
+              if (boxLeft + boxW > visibleRight - L - 8) {
+                boxLeft = mx - 8 - boxW;
               }
-              boxLeft = Math.max(visibleLeft + 8, Math.min(boxLeft, visibleRight - boxW - 8));
+              boxLeft = Math.max(visibleLeft - L + 8, Math.min(boxLeft, visibleRight - L - boxW - 8));
               const tipX = boxLeft;
-              const tipY = Math.max(T, Math.min(mousePos.y + 4, T + PLOT_H - boxH));
+              const tipY = Math.max(0, Math.min(my + 4, PLOT_H - boxH));
              return (
                <g>
                  <rect
@@ -594,19 +596,21 @@ function StackedBarChart({
                 const v = (d as Record<string, unknown>)[m.id] as number | undefined;
                 return { name: m.name, v };
               });
-              const boxW = 130;
-              const boxH = 16 + lines.length * 16 + 8;
-              const offset = 0;
-              const el = scrollRef.current;
-              const visibleLeft = el?.scrollLeft ?? 0;
-              const visibleRight = el ? el.scrollLeft + el.clientWidth : SVG_W;
-              let boxLeft = mousePos.x + offset;
-              if (boxLeft + boxW > visibleRight - offset) {
-                boxLeft = mousePos.x - offset - boxW;
-              }
-              boxLeft = Math.max(visibleLeft + offset, Math.min(boxLeft, visibleRight - boxW - offset));
-              const tipX = boxLeft - offset;
-              const tipY = Math.max(T, Math.min(mousePos.y + 4, T + PLOT_H - boxH));
+const boxW = 130;
+               const boxH = 16 + lines.length * 16 + 8;
+               const offset = 0;
+               const el = scrollRef.current;
+               const visibleLeft = el?.scrollLeft ?? 0;
+               const visibleRight = el ? el.scrollLeft + el.clientWidth : SVG_W;
+               const mx = mousePos.x - L;
+               const my = mousePos.y - T;
+               let boxLeft = mx + offset;
+               if (boxLeft + boxW > visibleRight - L - offset) {
+                 boxLeft = mx - offset - boxW;
+               }
+               boxLeft = Math.max(visibleLeft - L + offset, Math.min(boxLeft, visibleRight - L - boxW - offset));
+               const tipX = boxLeft - offset;
+               const tipY = Math.max(0, Math.min(my + 4, PLOT_H - boxH));
               return (
                 <g>
                   <rect

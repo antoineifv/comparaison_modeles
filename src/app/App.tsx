@@ -1033,7 +1033,7 @@ export default function App() {
 
               {/* ── Heatmap ── */}
               <div className="overflow-x-auto">
-              <table className="border-collapse text-sm w-full min-w-max">
+              <table className="border-collapse text-sm w-full">
                 <thead>
                   <tr>
                     <th

@@ -578,7 +578,7 @@ function StackedBarChart({
               });
               const boxW = 130;
               const boxH = 16 + lines.length * 16 + 8;
-              const offset = 8;
+              const offset = 4;
               const el = scrollRef.current;
               const visibleLeft = el?.scrollLeft ?? 0;
               const visibleRight = el ? el.scrollLeft + el.clientWidth : SVG_W;

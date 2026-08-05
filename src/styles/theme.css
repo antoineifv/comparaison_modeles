@@ -3,9 +3,9 @@
 :root {
   --font-size: 15px;
   --font-display: 'Open Sans', system-ui, sans-serif;
-  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-numbers: 'Courier New', monospace;
-  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --font-sans: 'Open Sans', system-ui, sans-serif;
+  --font-numbers: 'Open Sans', system-ui, sans-serif;
+  --font-mono: 'Open Sans', system-ui, sans-serif;
 
   --background: #f6f8f4;
   --foreground: #1c2b1c;

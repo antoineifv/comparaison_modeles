@@ -227,7 +227,7 @@ function ConsensusChart({
                   textAnchor="end"
                   fontSize={9.5}
                   fill={RISK[v].text}
-                  fontFamily="var(--font-sans)"
+                  fontFamily="'Open Sans', system-ui, sans-serif"
                   fontWeight="500"
                 >
                   {v} {RISK[v].label}
@@ -303,7 +303,7 @@ function ConsensusChart({
                       x={x + BAR_W / 2} y={PLOT_H + 14}
                       textAnchor="middle" fontSize={9}
                       fill={d.isToday ? "#2d6a4f" : "#6b7a69"}
-                      fontFamily="var(--font-sans)"
+                      fontFamily="'Open Sans', system-ui, sans-serif"
                       fontWeight={d.isToday ? "bold" : "normal"}
                     >
                       {d.date}
@@ -314,7 +314,7 @@ function ConsensusChart({
                     <text
                       x={x + BAR_W / 2} y={PLOT_H + 26}
                       textAnchor="middle" fontSize={8.5}
-                      fill="#2d6a4f" fontFamily="var(--font-sans)"
+                      fill="#2d6a4f" fontFamily="'Open Sans', system-ui, sans-serif"
                       fontWeight="bold"
                     >
                       auj.
@@ -327,7 +327,7 @@ function ConsensusChart({
             <text
               x={n * GROUP_W / 2} y={10}
               textAnchor="middle" fontSize={9}
-              fill="#9ca3af" fontFamily="var(--font-sans)"
+              fill="#9ca3af" fontFamily="'Open Sans', system-ui, sans-serif"
             >
               ← historique  |  prévision →
             </text>
@@ -365,7 +365,7 @@ function ConsensusChart({
                  <text
                    x={tipX + 16} y={tipY + 14}
                    fontSize={9.5} fill="#6b7280"
-                   fontFamily="var(--font-sans)" fontWeight="bold"
+                   fontFamily="'Open Sans', system-ui, sans-serif" fontWeight="bold"
                  >
                    {d.date}{d.isToday ? " (auj.)" : d.isForecast ? " (prévu)" : " (hist.)"}
                  </text>
@@ -373,7 +373,7 @@ function ConsensusChart({
                    <text
                      x={tipX + 16} y={tipY + 30}
                      fontSize={9.5} fill="#1c2b1c"
-                     fontFamily="var(--font-sans)"
+                     fontFamily="'Open Sans', system-ui, sans-serif"
                    >
                      {`Observé : ${d.observed} – ${RISK[d.observed]?.label}`}
                    </text>
@@ -387,7 +387,7 @@ function ConsensusChart({
                        x={tipX + 16} y={baseY}
                        fontSize={9.5}
                        fill={r?.text ?? "#374151"}
-                       fontFamily="var(--font-sans)"
+                       fontFamily="'Open Sans', system-ui, sans-serif"
                      >
                        {`${l.name} : ${l.v ?? "—"} – ${r?.label ?? "N/A"}`}
                      </text>
@@ -504,7 +504,7 @@ function StackedBarChart({
                   textAnchor="end"
                   fontSize={9.5}
                   fill={RISK[v].text}
-                  fontFamily="var(--font-sans)"
+                  fontFamily="'Open Sans', system-ui, sans-serif"
                   fontWeight="500"
                 >
                   {v} {RISK[v].label}
@@ -568,7 +568,7 @@ function StackedBarChart({
                       x={x + BAR_W / 2} y={PLOT_H + 14}
                       textAnchor="middle" fontSize={9}
                       fill={d.isToday ? "#2d6a4f" : "#6b7a69"}
-                      fontFamily="var(--font-sans)"
+                      fontFamily="'Open Sans', system-ui, sans-serif"
                       fontWeight={d.isToday ? "bold" : "normal"}
                     >
                       {d.date}
@@ -579,7 +579,7 @@ function StackedBarChart({
                     <text
                       x={x + BAR_W / 2} y={PLOT_H + 26}
                       textAnchor="middle" fontSize={8.5}
-                      fill="#2d6a4f" fontFamily="var(--font-sans)"
+                      fill="#2d6a4f" fontFamily="'Open Sans', system-ui, sans-serif"
                       fontWeight="bold"
                     >
                       auj.
@@ -622,7 +622,7 @@ const mx = mousePos.x - L;
                   <text
                     x={tipX + 10} y={tipY + 14}
                     fontSize={9.5} fill="#6b7280"
-                    fontFamily="var(--font-sans)" fontWeight="bold"
+                    fontFamily="'Open Sans', system-ui, sans-serif" fontWeight="bold"
                   >
                     {d.date}{d.isToday ? " (auj.)" : d.isForecast ? " (prévu)" : " (hist.)"}
                   </text>
@@ -635,7 +635,7 @@ const mx = mousePos.x - L;
                         x={tipX + 10} y={baseY}
                         fontSize={9.5}
                         fill={r?.text ?? "#374151"}
-                        fontFamily="var(--font-sans)"
+                        fontFamily="'Open Sans', system-ui, sans-serif"
                       >
                         {`${l.name} : ${l.v ?? "—"} – ${r?.label ?? "N/A"}`}
                       </text>
@@ -981,25 +981,23 @@ export default function App() {
         </div>
       </div>
 
-      {/* ── Risk legend ── */}
-      <div className="px-6 py-2.5 border-b border-border bg-background flex items-center gap-3 flex-wrap">
-        <span className="text-xs text-muted-foreground font-medium">Classe de risque :</span>
-        {RISK.map((r, i) => (
-          <span
-            key={i}
-            className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded border font-medium"
-            style={{ backgroundColor: r.bg, color: r.text, borderColor: r.border }}
-          >
-            <span
-              className="w-4 h-4 rounded flex items-center justify-center text-[10px] font-bold"
-              style={{ backgroundColor: r.dot + "33", color: r.text }}
-            >
-              {i}
-            </span>
-            {r.label}
-          </span>
-        ))}
-      </div>
+{/* ── Risk legend ── */}
+       <div className="px-6 py-2.5 border-b border-border bg-background flex items-center gap-3 flex-wrap" style={{ fontFamily: "'Open Sans', system-ui, sans-serif" }}>
+         <span className="text-xs text-muted-foreground font-medium">Classe de risque :</span>
+         {RISK.slice(1).map((r) => (
+           <span
+             key={r.label}
+             className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded border font-medium"
+             style={{ backgroundColor: r.bg, color: r.text, borderColor: r.border }}
+           >
+             <span
+               className="w-4 h-4 rounded flex items-center justify-center text-[10px] font-bold"
+               style={{ backgroundColor: r.dot + "33", color: r.text }}
+             />
+             {r.label}
+           </span>
+         ))}
+       </div>
 
       {/* ── Body ── */}
       <div className="flex flex-col lg:flex-row flex-1 min-h-0">

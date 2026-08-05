@@ -2,10 +2,10 @@
 
 :root {
   --font-size: 15px;
-  --font-display: 'Teachers', system-ui, sans-serif;
-  --font-sans: 'Teachers', system-ui, sans-serif;
-  --font-numbers: 'Teachers', system-ui, sans-serif;
-  --font-mono: 'Teachers', system-ui, sans-serif;
+  --font-display: 'Open Sans', system-ui, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-numbers: 'Courier New', monospace;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
 
   --background: #f6f8f4;
   --foreground: #1c2b1c;

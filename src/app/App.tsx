@@ -984,16 +984,18 @@ export default function App() {
 {/* ── Risk legend ── */}
        <div className="px-6 py-2.5 border-b border-border bg-background flex items-center gap-3 flex-wrap" style={{ fontFamily: "'Open Sans', system-ui, sans-serif" }}>
          <span className="text-xs text-muted-foreground font-medium">Classe de risque :</span>
-         {RISK.slice(1).map((r) => (
+         {RISK.map((r, i) => (
            <span
-             key={r.label}
+             key={i}
              className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded border font-medium"
              style={{ backgroundColor: r.bg, color: r.text, borderColor: r.border }}
            >
              <span
                className="w-4 h-4 rounded flex items-center justify-center text-[10px] font-bold"
                style={{ backgroundColor: r.dot + "33", color: r.text }}
-             />
+             >
+               {i}
+             </span>
              {r.label}
            </span>
          ))}

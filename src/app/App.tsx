@@ -865,12 +865,6 @@ export default function App() {
           >
             <MapPin className="w-3.5 h-3.5 text-primary flex-shrink-0" />
             <span className="font-medium">{location.name}</span>
-            <span
-              className="text-muted-foreground text-xs hidden sm:inline"
-              style={{ fontFamily: "var(--font-sans)" }}
-            >
-              {location.lat}
-            </span>
             <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
           </button>
           {locationOpen && (

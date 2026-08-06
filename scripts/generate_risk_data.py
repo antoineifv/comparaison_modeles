@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """
-Merge risque_modele_16.csv and risque_modele_33.csv into risque_modele.csv,
-then convert the merged CSV to src/app/riskData.json for the React dashboard.
+Read risque_modele_16.csv and risque_modele_33.csv directly,
+then convert the combined data to src/app/riskData.json for the React dashboard.
 
 Usage:
-  python scripts/generate_risk_data.py          # merge + generate
-  python scripts/generate_risk_data.py --merge  # merge only
-  python scripts/generate_risk_data.py --json   # generate JSON only (from risque_modele.csv)
+  python scripts/generate_risk_data.py          # generate JSON from both CSVs
 """
 
 import csv
@@ -19,7 +17,6 @@ BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 CSV_16 = os.path.join(BASE, "risque_modele_16.csv")
 CSV_33 = os.path.join(BASE, "risque_modele_33.csv")
-CSV_MERGED = os.path.join(BASE, "risque_modele.csv")
 JSON_OUT = os.path.join(BASE, "src", "app", "riskData.json")
 
 EXCEL_EPOCH = date(1899, 12, 30)
@@ -51,37 +48,28 @@ def date_to_serial(date_str):
     return str((d - EXCEL_EPOCH).days)
 
 
-def merge_csvs():
-    """Concatenate risque_modele_16.csv and risque_modele_33.csv into risque_modele.csv."""
-    source_files = [CSV_16, CSV_33]
-    total_rows = 0
-    with open(CSV_MERGED, "w", encoding="utf-8-sig", newline="") as fout:
-        writer = csv.writer(fout, delimiter=";")
-        for i, src in enumerate(source_files):
-            with open(src, "r", encoding="utf-8-sig", newline="") as fin:
-                reader = csv.reader(fin, delimiter=";")
-                header = next(reader)
-                if i == 0:
-                    writer.writerow(header)
-                for row in reader:
-                    writer.writerow(row)
-                    total_rows += 1
-    print(f"Merged {total_rows} data rows -> {os.path.relpath(CSV_MERGED, BASE)}")
-
-
-def generate_json():
-    """Convert merged risque_modele.csv to src/app/riskData.json."""
+def read_csv(filepath):
+    """Read a CSV file and return rows as dicts."""
     rows = []
-    with open(CSV_MERGED, "r", encoding="utf-8-sig", newline="") as f:
+    with open(filepath, "r", encoding="utf-8-sig", newline="") as f:
         reader = csv.DictReader(f, delimiter=";")
         for r in reader:
             rows.append(r)
+    return rows
+
+
+def generate_json():
+    """Read both source CSVs and generate src/app/riskData.json."""
+    source_files = [CSV_16, CSV_33]
+    all_rows = []
+    for src in source_files:
+        all_rows.extend(read_csv(src))
 
     communes_set = set()
     dates_set = set()
     by_commune = {}
 
-    for r in rows:
+    for r in all_rows:
         commune = r["COMMUNE"].strip()
         serial = date_to_serial(r["DATE"])
         communes_set.add(commune)
@@ -126,13 +114,4 @@ def generate_json():
 
 
 if __name__ == "__main__":
-    do_merge = True
-    do_json = True
-    if len(sys.argv) > 1:
-        do_merge = "--merge" in sys.argv
-        do_json = "--json" in sys.argv
-
-    if do_merge:
-        merge_csvs()
-    if do_json:
-        generate_json()
+    generate_json()
